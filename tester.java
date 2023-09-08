@@ -5,6 +5,8 @@ public class tester {
         Blob blob = new Blob(".\\testfile.txt");
         System.out.println(blob.getContents());
         System.out.println(blob.getsha1Contents());
+        System.out.println(blob.getContents());
+        System.out.println(blob.getsha1Contents());
 
     }
 }
