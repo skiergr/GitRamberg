@@ -36,8 +36,12 @@ public class Index {
         rewriteIndex();
     }
 
-    public void remove() {
-
+    public void remove(String fileName) throws IOException {
+        String sha1 = indexMap.get(fileName);
+        File blob = new File(".\\test\\objects\\" + sha1);
+        blob.delete();
+        indexMap.remove(fileName);
+        rewriteIndex();
     }
 
     public void rewriteIndex() throws IOException {

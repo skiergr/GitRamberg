@@ -5,5 +5,8 @@ public class IndexTester {
         Index index = new Index();
         index.init();
         index.add("testfile.txt");
+        index.add("testfile2.txt");
+        index.add("testfile3.txt");
+        index.remove("testfile3.txt");
     }
 }
