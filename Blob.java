@@ -12,6 +12,7 @@ public class Blob {
         fileName = fileInput;
         contents = getFileContents(fileName);
         sha1Contents = convertToSha1(contents);
+        createBlob(sha1Contents, contents);
     }
 
     public String getFileContents(String fileName) throws IOException {
@@ -48,6 +49,13 @@ public class Blob {
         String result = formatter.toString();
         formatter.close();
         return result;
+    }
+
+    public void createBlob(String sha1, String fileContents) throws IOException {
+        File file = new File(".\\test\\objects\\" + sha1);
+        FileWriter writer = new FileWriter(file);
+        writer.write(fileContents);
+        writer.close();
     }
 
     // testing methods
