@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
@@ -39,6 +40,11 @@ public class Index {
 
     }
 
-    public voidrewriteIndex(){
-
+    public void rewriteIndex() throws IOException {
+        FileWriter writer = new FileWriter(indexRelativePath);
+        for (String fileName : indexMap.keySet()) {
+            writer.write(fileName + " : " + indexMap.get(fileName) + "\n");
+        }
+        writer.close();
     }
+}
