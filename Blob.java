@@ -52,7 +52,7 @@ public class Blob {
     }
 
     public void createBlob(String sha1, String fileContents) throws IOException {
-        File file = new File(".\\test\\objects\\" + sha1);
+        File file = new File("./test/objects/" + sha1);
         FileWriter writer = new FileWriter(file);
         writer.write(fileContents);
         writer.close();

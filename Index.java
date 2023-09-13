@@ -13,8 +13,8 @@ public class Index {
 
     public Index() {
         indexMap = new HashMap<String, String>();
-        objectsRelativePath = ".\\test\\objects";
-        indexRelativePath = ".\\test\\index.txt";
+        objectsRelativePath = "./test/objects";
+        indexRelativePath = "./test/index.txt";
     }
 
     public void init() throws IOException {

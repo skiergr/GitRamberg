@@ -26,7 +26,7 @@ public class Tree {
     }
     
     public void printHash () throws IOException {
-        File file = new File(".\\test\\objects\\tree");
+        File file = new File("./test/objects/tree");
         FileWriter writer = new FileWriter(file);
         for (int i = 0; i < entries.size(); i++) {
             writer.write(entries.get(i) + "\n");
