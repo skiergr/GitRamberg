@@ -1,6 +1,8 @@
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -31,18 +33,22 @@ public class ExampleTester {
          */
     }
 
+
     @Test
     @DisplayName("[8] Test if initialize and objects are created correctly")
     void testInitialize() throws Exception {
 
         // Run the person's code
         // TestHelper.runTestSuiteMethods("testInitialize");
+        Index index = new Index();
+        index.init();
 
         // check if the file exists
-        File file = new File("index");
-        Path path = Paths.get("objects");
-
+        File file = new File("./test/index");
+        Path path = Paths.get("./test/objects");
+        //tests if index exists
         assertTrue(file.exists());
+        //tests if objects exist
         assertTrue(Files.exists(path));
     }
 
@@ -55,20 +61,38 @@ public class ExampleTester {
             // Manually create the files and folders before the 'testAddFile'
             // MyGitProject myGitClassInstance = new MyGitProject();
             // myGitClassInstance.init();
-
-            // TestHelper.runTestSuiteMethods("testCreateBlob", file1.getName());
+            Index index = new Index();
+            index.init();
+            index.add("testFile");
 
         } catch (Exception e) {
             System.out.println("An error occurred: " + e.getMessage());
         }
 
         // Check blob exists in the objects folder
-        File file_junit1 = new File("objects/" + file1.methodToGetSha1());
+        BufferedReader reader = new BufferedReader(new FileReader(new File("testFile")));
+            String fileContents = "";
+            while (reader.ready()) {
+                fileContents += reader.readLine();
+            }
+            String sha = Blob.convertToSha1(fileContents);
+        reader.close();
+        File file_junit1 = new File("objects/" + sha);
         assertTrue("Blob file to add not found", file_junit1.exists());
 
         // Read file contents
-        String indexFileContents = MyUtilityClass.readAFileToAString("objects/" + file1.methodToGetSha1());
-        assertEquals("File contents of Blob don't match file contents pre-blob creation", indexFileContents,
-                file1.getContents());
+        BufferedReader reader2 = new BufferedReader(new FileReader(sha));
+        String newContents = "";
+        while (reader2.ready()) {
+            newContents += reader2.readLine();
+        }
+        reader2.close();
+        assertEquals("File contents of Blob don't match file contents pre-blob creation", newContents,
+                fileContents);
+    }
+    @Test
+    @DisplayName("[15] Test if removing a blob works.")
+    void testRemoveBlob() throws Exception {
+
     }
 }

@@ -25,7 +25,7 @@ public class Blob {
         return contents.toString();
     }
 
-    private static String convertToSha1(String fileContents) {
+    public static String convertToSha1(String fileContents) {
         String sha1 = "";
         try {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");
