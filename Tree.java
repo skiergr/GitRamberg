@@ -6,8 +6,12 @@ import java.util.ArrayList;
 public class Tree {
     private ArrayList<String> entries;
 
-    public Tree() {
+    public Tree() throws IOException {
         entries = new ArrayList<String>();
+        File file = new File("test/objects/tree");
+        if (!file.exists()) {
+            file.createNewFile();
+        }
     }
     
     public void add (String line ) throws IOException {
@@ -32,9 +36,5 @@ public class Tree {
         }
         writer.close();
     }
-    //Entries are a newline String in format  typeOfFile : shaOfFile : optionalFileName
-    //typeOfFile: Can be either the String 'blob' or 'tree' 
-    //shaOfFile: Is a valid sha1 of a file in the objects folder
-    //optionalFileName: if it's a blob, please include the filename
 
 }

@@ -4,12 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.DirectoryIteratorException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.LinkedHashMap;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -77,7 +76,7 @@ public class JUnitTester {
 
 
     @Test
-    @DisplayName("[15] Test if adding a blob works.  5 for sha, 5 for file contents, 5 for correct location")
+    @DisplayName("Test if adding a blob works.  5 for sha, 5 for file contents, 5 for correct location")
     void testCreateBlob() throws Exception {
 
         // Manually create the files and folders before the 'testAddFile'
@@ -118,7 +117,7 @@ public class JUnitTester {
     }
 
     @Test
-    @DisplayName("[15] Calling the Add Function.")
+    @DisplayName("Calling the Add Function.")
     void testAdd() throws Exception {
         Index idx = new Index();
         idx.init();
@@ -155,6 +154,36 @@ public class JUnitTester {
         br1.close();
         String newExpectedIndex = "testfile2 : f4b774b6be2cbfab5d69687fa6445453d0527bde\ntestfile3 : b055f09351c99e93474bf62e55504c9b115214ca\n";
         assertEquals("index is correct", newIndexContents, newExpectedIndex);
+    }
+    @Test
+    @DisplayName("Testing Trees.")
+    void TestTree () throws IOException {
+        Index index = new Index ();
+        index.init();
+        Tree tree = new Tree();
+        File treeFile = new File("test/objects/tree");
+        assertTrue(treeFile.exists());
 
+        tree.add("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
+        tree.add("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
+
+        BufferedReader br = new BufferedReader(new FileReader(treeFile));
+        String expected = "tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b\nblob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt\n";
+        String actual = "";
+        while(br.ready()) {
+            actual += (char) br.read();
+        }
+        br.close();
+        assertEquals(expected, actual);
+
+        tree.remove("file1.txt");
+        tree.remove("bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
+        BufferedReader br1 = new BufferedReader(new FileReader(treeFile));
+        String actual1 = "";
+        while(br1.ready()) {
+            actual1 += (char) br1.read();
+        }
+        br1.close();
+        assertEquals("", actual1);
     }
 }
