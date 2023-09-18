@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -153,5 +152,16 @@ public class JUnitIndexTester {
         String newExpectedIndex = "testfile2 : f4b774b6be2cbfab5d69687fa6445453d0527bde\ntestfile3 : b055f09351c99e93474bf62e55504c9b115214ca\n";
         //tests that the entries were removed from the index
         assertEquals("index is correct", newIndexContents, newExpectedIndex);
+
+        idx.remove("testfile2");
+        BufferedReader br2 = new BufferedReader(new FileReader("test/index"));
+        String newIndexContents2 = "";
+        while (br2.ready()) {
+            newIndexContents2 += (char) br2.read();
+        }
+        br2.close();
+        String newExpectedIndex2 = "testfile3 : b055f09351c99e93474bf62e55504c9b115214ca\n";
+        //tests that the entries were removed from the index
+        assertEquals("index is correct", newIndexContents2, newExpectedIndex2);
     }
 }
