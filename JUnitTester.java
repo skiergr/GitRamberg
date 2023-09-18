@@ -91,7 +91,7 @@ public class JUnitTester {
     }
     
     @Test
-    @DisplayName("[8] Test if initialize works")
+    @DisplayName("Test if initialize works")
     void testInitialize() throws Exception {
         File index = new File("./test/index");
         if (index.exists()) {
