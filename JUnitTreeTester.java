@@ -6,6 +6,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Formatter;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,6 +29,7 @@ public class JUnitTreeTester {
     private static String expectedIndex = "testFile : 8345afc8180a8ea7f76903ad3b70c1c9180bb2e0\n" + //
             "testfile2 : f4b774b6be2cbfab5d69687fa6445453d0527bde\n" + //
             "testfile3 : b055f09351c99e93474bf62e55504c9b115214ca\n";
+
 
     @BeforeAll
     static void setUp() throws Exception {
@@ -77,7 +82,8 @@ public class JUnitTreeTester {
         Index index = new Index ();
         index.init();
         Tree tree = new Tree();
-        File treeFile = new File("test/objects/tree");
+        String sha = convertToSha1("");
+        File treeFile = new File("test/objects/" + sha);
         assertTrue(treeFile.exists());
     }
 
@@ -87,13 +93,15 @@ public class JUnitTreeTester {
         Index index = new Index ();
         index.init();
         Tree tree = new Tree();
-        File treeFile = new File("test/objects/tree");
 
         tree.add("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
         tree.add("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
 
-        BufferedReader br = new BufferedReader(new FileReader(treeFile));
         String expected = "tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b\nblob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt\n";
+
+        String sha1 = convertToSha1(expected);
+        File treeFile = new File ("test/objects/4ed9f49f13bb4d898738794841fb107c24036434");
+        BufferedReader br = new BufferedReader(new FileReader(treeFile));
         String actual = "";
         while(br.ready()) {
             actual += (char) br.read();
@@ -109,7 +117,8 @@ public class JUnitTreeTester {
         Index index = new Index ();
         index.init();
         Tree tree = new Tree();
-        File treeFile = new File("test/objects/tree");
+        String sha1 = convertToSha1("");
+        File treeFile = new File ("test/objects/4ed9f49f13bb4d898738794841fb107c24036434");
         assertTrue(treeFile.exists());
 
         tree.add("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
@@ -124,5 +133,30 @@ public class JUnitTreeTester {
         br1.close();
         //tests that all the entries were removed from the tree file as expected
         assertEquals("", actual1);
+    }
+     public static String convertToSha1(String fileContents) {
+        String sha1 = "";
+        try {
+            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+            crypt.reset();
+            crypt.update(fileContents.getBytes("UTF-8"));
+            sha1 = byteToHex(crypt.digest());
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        return sha1;
+    }
+
+    // Used for sha1
+    private static String byteToHex(final byte[] hash) {
+        Formatter formatter = new Formatter();
+        for (byte b : hash) {
+            formatter.format("%02x", b);
+        }
+        String result = formatter.toString();
+        formatter.close();
+        return result;
     }
 }
