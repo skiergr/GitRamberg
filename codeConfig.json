@@ -1,0 +1,84 @@
+[
+    {
+        "className": "Index",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [],
+                "values": []
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "init",
+                "parameters": [],
+                "values": []
+            },
+            {
+                "methodName": "add",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "fileName"
+                ]
+            },
+            {
+                "methodName": "remove",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "fileName"
+                ]
+            },
+            {
+                "methodName": "rewriteIndex",
+                "parameters": [
+                    
+                ],
+                "values": [
+                ]
+            }
+        ]
+    },
+    {
+        "className": "Blob",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [
+                    "String"
+                ],
+                "values": [
+                    "fileInput"
+                ]
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "getFileContents",
+                "parameters": ["String"],
+                "values": ["fileName"]
+            },
+            {
+                "methodName": "convertToSha1",
+                "parameters": ["String"],
+                "values": ["fileContents"]
+            },
+            {
+                "methodName": "byteToHex",
+                "parameters": ["byte[]"],
+                "values": ["hash"]
+            },
+            {
+                "methodName": "createBlob",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "sha1",
+                    "fileContents"
+                ]
+            }
+        ]
+    }
+]
