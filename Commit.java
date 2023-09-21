@@ -9,7 +9,11 @@ import java.util.LinkedList;
 
 public class Commit {
 
-    
+    static String prevCommitSha;
+    static String prevCommitContents1; //commit contents before the line we skip
+    static String prevCommitContents2; //commit contents after the line we skip
+
+    //first commit ever
     public Commit (String author, String summary) throws IOException
     {
         StringBuilder total = new StringBuilder (""); //contains everything needed to make sha1 of commit name
@@ -23,6 +27,9 @@ public class Commit {
         total.append ("\n" + summary);
         String commitSha = convertToSha1 (total.toString());
 
+        prevCommitSha = commitSha; //so that the later commits can find the previous commit
+        prevCommitContents1 = treeSha + " \n";
+        prevCommitContents2 = author + "\n" + date + "\n" + summary;
 
         File commitList = new File ("test/objects/" + commitSha);
         PrintWriter pw = new PrintWriter (commitList);
@@ -35,6 +42,8 @@ public class Commit {
 
         pw.close();
     }
+
+    //not the first commit
     public Commit (String parentCommit, String author, String summary) throws IOException
     {
         StringBuilder total = new StringBuilder ("");
@@ -58,6 +67,16 @@ public class Commit {
         pw.println (summary);
 
         pw.close();
+
+        //now i need to update the old commit so that it points to the next
+        PrintWriter pww = new PrintWriter (prevCommitSha);
+        pww.println (prevCommitContents1);
+        pww.println ("\n");
+        pww.println (commitSha); //this is the sha value for the current commit
+        pww.println (prevCommitContents2);
+        pww.close();
+
+        prevCommitSha = commitSha; //updates the prevCommitSha to get ready for the next one
     }
 
     //creates an object Tree and saves it to the objects folder, returns the sha value of the tree contents
@@ -123,8 +142,12 @@ public static void main (String [] args) throws IOException
 {
     //i still haven't figured out junit tests, so i test this way
     Commit c0 = new Commit ("Mr. Stout", "Did I ever tell you I like durian?");
-    Commit c1 = new Commit ("80d2bd0df16550be8fe0066990b06619434cd855", "Mr. Stout", "I like pugs");
+    Commit c1 = new Commit ("dc80b65beb1bf8398a6d7fd3e6c15d7524624276", "Mr. Stout", "I like pugs");
+    
+    //well, it's certainly creating files. However, the sha1 method does not appear to be working properly
+    //at least, the sha1 values being generated are not correct
+    //talk to grady/whoever got this before me during class
 
-    //well, it's certainly creating files
+    //also the 'next' pointer is not working
 }
 }
