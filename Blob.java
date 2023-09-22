@@ -63,7 +63,7 @@ public class Blob {
         return contents;
     }
 
-    public String getsha1Contents() {
+    ;public String getsha1Contents() {
         return sha1Contents;
     }
 

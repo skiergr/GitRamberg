@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Commit",
+            "request": "launch",
+            "mainClass": "Commit",
+            "projectName": "GitRamberg-GradyToSophia_9d3b409f"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"
