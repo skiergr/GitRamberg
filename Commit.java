@@ -42,7 +42,7 @@ public class Commit {
         pw.println (""); //no next commit yet
         pw.println (author);
         pw.println (date);
-        pw.println (summary);
+        pw.print (summary);
 
         pw.close();
     }
@@ -68,7 +68,7 @@ public class Commit {
         pw.println (""); //no next commit yet
         pw.println (author);
         pw.println (date);
-        pw.println (summary);
+        pw.print (summary);
 
         pw.close();
 
