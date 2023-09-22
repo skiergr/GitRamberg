@@ -81,6 +81,9 @@ public class JUnitTreeTester {
         assertTrue(treeFile.exists());
     }
 
+    //look man, idk where you are testing convertToSha, but it isn't working
+    //as in, it runs, but is generating the wrong sha1 code
+
     @Test
     @DisplayName("Testing Add function.")
     void testAdd () throws IOException {

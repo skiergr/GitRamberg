@@ -4,6 +4,10 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
 import java.util.Formatter;
 import java.util.LinkedList;
 
@@ -90,7 +94,10 @@ public class Commit {
     }
     public String getDate ()
     {
-        return "July. 14. 2004";
+        //return "July. 14. 2004";
+        String timeStamp = new SimpleDateFormat("MM-dd-YYYY").format(Calendar.getInstance().getTime());
+        return timeStamp;
+
     }
 
     /*
