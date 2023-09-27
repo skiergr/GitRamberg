@@ -65,19 +65,20 @@ public class JUnitBlobTester {
     @Test
     @DisplayName("Test if contents in the blob and the original file are the same")
     void testBlobContent() throws Exception {
-        Blob blob = new Blob (testFile);
+        Blob blob = new Blob(testFile);
         String contents = blob.getFileContents(testFile);
-        //ensures that the contents of the original file and the contents of the blob file are the same
+        // ensures that the contents of the original file and the contents of the blob
+        // file are the same
         assertEquals("Contents are the same", testFileContents, contents);
     }
 
     @Test
     @DisplayName("Test if the blob file is created")
     void testBlobFile() throws Exception {
-        Blob blob = new Blob (testFile);
+        Blob blob = new Blob(testFile);
         String blobSha = blob.getsha1Contents();
-        File file = new File ("test/objects/"+blobSha);
-        //tests that the created blob file is in the right place and has the right name
+        File file = new File("test/objects/" + blobSha);
+        // tests that the created blob file is in the right place and has the right name
         assertTrue(file.exists());
     }
 }
