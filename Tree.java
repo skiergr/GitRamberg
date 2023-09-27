@@ -18,171 +18,181 @@ import java.util.ArrayList;
 
 import java.util.Formatter;
 
+public class Tree {
 
+    String sha;
 
-public class
-Tree {
+    public static void main(String[] args) throws Exception {
+        Tree tree = new Tree();
+    }
 
-private ArrayList<String>
-entries;
+    private ArrayList<String> entries;
 
-private String
-currentFileName;
+    private String currentFileName;
 
+    public Tree() throws IOException {
 
+        entries = new ArrayList<String>();
 
-public Tree()
-throws IOException {
+        sha = convertToSha1("");
 
-entries = new ArrayList<String>();
+        File file = new File("test/objects/" + sha);
 
-String sha = convertToSha1("");
+        this.currentFileName = "test/objects/" + sha;
 
-File file = new File("test/objects/" + sha);
+        if (!file.exists()) {
 
-this.currentFileName = "test/objects/" + sha;
+            file.createNewFile();
 
-if (!file.exists()) {
+        }
+    }
 
-    file.createNewFile();
+    public String convertToSha1(String fileContents) {
 
-}
+        String sha1 = "";
 
-}
+        try {
+            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+            crypt.reset();
 
+            crypt.update(fileContents.getBytes("UTF-8"));
 
+            sha1 = byteToHex(crypt.digest());
 
-public String convertToSha1(String fileContents) {
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
 
-    String sha1 = "";
+            e.printStackTrace();
 
-    try {
-        MessageDigest 
-        crypt = 
-        MessageDigest.getInstance("SHA-1");
-        crypt.reset();
+        }
 
-        crypt.update(fileContents.getBytes("UTF-8"));
-
-        sha1 = byteToHex(crypt.digest());
-
-    } catch (NoSuchAlgorithmException e) {
-        e.printStackTrace();
-    } catch (UnsupportedEncodingException e) {
-
-        e.printStackTrace();
+        return sha1;
 
     }
 
-    return sha1;
+    // Used for sha1
 
-}
+    private static String byteToHex(final byte[] hash) {
 
+        Formatter formatter = new Formatter();
 
+        for (byte b : hash) {
 
-// Used for sha1
+            formatter.format("%02x", b);
 
-private static
-String byteToHex(final
-byte[] hash) {
+        }
 
-Formatter 
-formatter = 
-new Formatter();
+        String result = formatter.toString();
 
-for (byte b : hash) {
+        formatter.close();
 
-formatter.format("%02x",b);
+        return result;
 
-}
-
-String result = formatter.toString();
-
-formatter.close();
-
-return result;
-
-}
-
-
-public void add (String line ) throws IOException {
-
-entries.add(line);
-
-String contents = "";
-
-BufferedReader br = new BufferedReader(new FileReader(currentFileName));
-
-while (br.ready()) {
-
-contents += (char) br.read();
-}
-
-br.close();
-
-String sha = convertToSha1(contents);
-File file = new File("test/objects/" + sha);
-File file2 = new File (currentFileName);
-
-file2.delete();
-file.createNewFile();
-
-currentFileName = "test/objects/" + sha;
-
-printHash();
-
-}
-
-
-
-public void remove(String enter) throws IOException {
-
-for (int i = 0; i < entries.size(); i++) {
-
-    if (entries.get(i).contains(enter))
-    {
-        entries.remove(i);
     }
-}
 
-String contents = "";
+    public void add(String line) throws IOException {
 
-BufferedReader br = new BufferedReader(new FileReader(currentFileName));
+        entries.add(line);
 
-while (br.ready()) {
-    contents 
-    += (char) 
-    br.read();
-}
-br.close();
+        String contents = "";
 
-String sha = convertToSha1(contents);
+        BufferedReader br = new BufferedReader(new FileReader(currentFileName));
 
-File file = new File("test/objects/" + sha);
-File file2 = new File (currentFileName);
+        while (br.ready()) {
 
-file2.delete();
-file.createNewFile();
+            contents += (char) br.read();
+        }
 
-currentFileName = "test/objects/" + sha; 
-printHash();
+        br.close();
 
-}
+        String sha = convertToSha1(contents);
+        File file = new File("test/objects/" + sha);
+        File file2 = new File(currentFileName);
 
+        file2.delete();
+        file.createNewFile();
 
-public void printHash () throws IOException {
+        currentFileName = "test/objects/" + sha;
 
-File file = new File(currentFileName);
+        printHash();
 
-FileWriter writer = new FileWriter(file);
+    }
 
-for (int i = 0; i < entries.size(); i++) {
-    writer.write(entries.get(i)
-    + "\n");
-}
+    public void remove(String enter) throws IOException {
 
-    writer.close();
-}
+        for (int i = 0; i < entries.size(); i++) {
 
+            if (entries.get(i).contains(enter)) {
+                entries.remove(i);
+            }
+        }
+
+        String contents = "";
+
+        BufferedReader br = new BufferedReader(new FileReader(currentFileName));
+
+        while (br.ready()) {
+            contents += (char) br.read();
+        }
+        br.close();
+
+        String sha = convertToSha1(contents);
+
+        File file = new File("test/objects/" + sha);
+        File file2 = new File(currentFileName);
+
+        file2.delete();
+        file.createNewFile();
+
+        currentFileName = "test/objects/" + sha;
+        printHash();
+
+    }
+
+    public void printHash() throws IOException {
+
+        File file = new File(currentFileName);
+
+        FileWriter writer = new FileWriter(file);
+
+        for (int i = 0; i < entries.size(); i++) {
+            writer.write(entries.get(i)
+                    + "\n");
+        }
+
+        writer.close();
+    }
+
+    public String addDirectory(String directoryPath) throws Exception {
+        Tree tree = new Tree();
+        File directory = new File(directoryPath);
+
+        File[] list = directory.listFiles();
+        for (int i = 0; i < list.length; i++) {
+            File file = list[i];
+            if (file.exists()) {
+                if (file.isDirectory()) {
+                    String childTree = addDirectory(file.getPath());
+                    tree.add("tree : " + childTree + " : " + file.getName());
+                }
+                if (file.isFile()) {
+                    Blob blob = new Blob(file.getPath());
+                    tree.add("blob : " + blob.getsha1Contents() + " : " + file.getName());
+                }
+            } else {
+                throw new Exception("File or directy path does not exist");
+            }
+
+        }
+
+        sha = tree.getSha();
+        return sha;
+
+    }
+
+    public String getSha() {
+        return sha;
+    }
 
 }

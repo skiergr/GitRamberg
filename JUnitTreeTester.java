@@ -73,21 +73,21 @@ public class JUnitTreeTester {
 
     @Test
     @DisplayName("Testing that the tree file is created properly.")
-    void testTreeFileCreation () throws IOException {
-        Index index = new Index ();
+    void testTreeFileCreation() throws IOException {
+        Index index = new Index();
         index.init();
         Tree tree = new Tree();
         File treeFile = new File("test/objects/tree");
         assertTrue(treeFile.exists());
     }
 
-    //look man, idk where you are testing convertToSha, but it isn't working
-    //as in, it runs, but is generating the wrong sha1 code
+    // look man, idk where you are testing convertToSha, but it isn't working
+    // as in, it runs, but is generating the wrong sha1 code
 
     @Test
     @DisplayName("Testing Add function.")
-    void testAdd () throws IOException {
-        Index index = new Index ();
+    void testAdd() throws IOException {
+        Index index = new Index();
         index.init();
         Tree tree = new Tree();
         File treeFile = new File("test/objects/tree");
@@ -98,18 +98,18 @@ public class JUnitTreeTester {
         BufferedReader br = new BufferedReader(new FileReader(treeFile));
         String expected = "tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b\nblob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt\n";
         String actual = "";
-        while(br.ready()) {
+        while (br.ready()) {
             actual += (char) br.read();
         }
         br.close();
-        //checks that the entries match what is expected
+        // checks that the entries match what is expected
         assertEquals(expected, actual);
     }
 
     @Test
     @DisplayName("Testing Remove.")
-    void testRemove () throws IOException {
-        Index index = new Index ();
+    void testRemove() throws IOException {
+        Index index = new Index();
         index.init();
         Tree tree = new Tree();
         File treeFile = new File("test/objects/tree");
@@ -121,11 +121,21 @@ public class JUnitTreeTester {
         tree.remove("bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
         BufferedReader br1 = new BufferedReader(new FileReader(treeFile));
         String actual1 = "";
-        while(br1.ready()) {
+        while (br1.ready()) {
             actual1 += (char) br1.read();
         }
         br1.close();
-        //tests that all the entries were removed from the tree file as expected
+        // tests that all the entries were removed from the tree file as expected
         assertEquals("", actual1);
+    }
+
+    @Test
+    @DisplayName("Testing Add Directory.")
+    void testAddDirectory() throws Exception {
+        Index index = new Index();
+        index.init();
+        Tree tree = new Tree();
+        tree.addDirectory("testDirectory");
+
     }
 }
