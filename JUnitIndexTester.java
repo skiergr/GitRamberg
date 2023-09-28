@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -79,7 +78,7 @@ public class JUnitIndexTester {
         Index idx = new Index();
         idx.init();
         File file = new File("./test/index");
-        //tests if index file exists
+        // tests if index file exists
         assertTrue(file.exists());
     }
 
@@ -88,7 +87,7 @@ public class JUnitIndexTester {
         Index idx = new Index();
         idx.init();
         Path path = Paths.get("./test/objects");
-        //tests if objects directory exist
+        // tests if objects directory exist
         assertTrue(Files.exists(path));
     }
 
@@ -101,12 +100,12 @@ public class JUnitIndexTester {
         idx.add(testFile2);
         idx.add(testFile3);
 
-        //testing that blobs are created
+        // testing that blobs are created
         File file1 = new File("test/objects/" + testFileSha);
         File file2 = new File("test/objects/" + testFile2Sha);
         File file3 = new File("test/objects/" + testFile3Sha);
 
-        //asserts that the files have been created
+        // asserts that the files have been created
         assertTrue(file1.exists());
         assertTrue(file2.exists());
         assertTrue(file3.exists());
@@ -121,7 +120,7 @@ public class JUnitIndexTester {
         idx.add(testFile2);
         idx.add(testFile3);
 
-        //testing that the index is correct
+        // testing that the index is correct
         File index = new File("test/index");
         BufferedReader br = new BufferedReader(new FileReader(index));
         String indexContents = "";
@@ -129,7 +128,7 @@ public class JUnitIndexTester {
             indexContents += (char) br.read();
         }
         br.close();
-        //test that the index contents are right
+        // test that the index contents are right
         assertEquals("index is correct", indexContents, expectedIndex);
     }
 
@@ -141,7 +140,7 @@ public class JUnitIndexTester {
         idx.add(testFile);
         idx.add(testFile2);
         idx.add(testFile3);
-        //testing remove
+        // testing remove
         idx.remove("testFile");
         BufferedReader br1 = new BufferedReader(new FileReader("test/index"));
         String newIndexContents = "";
@@ -150,7 +149,7 @@ public class JUnitIndexTester {
         }
         br1.close();
         String newExpectedIndex = "testfile2 : f4b774b6be2cbfab5d69687fa6445453d0527bde\ntestfile3 : b055f09351c99e93474bf62e55504c9b115214ca\n";
-        //tests that the entries were removed from the index
+        // tests that the entries were removed from the index
         assertEquals("index is correct", newIndexContents, newExpectedIndex);
 
         idx.remove("testfile2");
@@ -161,7 +160,7 @@ public class JUnitIndexTester {
         }
         br2.close();
         String newExpectedIndex2 = "testfile3 : b055f09351c99e93474bf62e55504c9b115214ca\n";
-        //tests that the entries were removed from the index
+        // tests that the entries were removed from the index
         assertEquals("index is correct", newIndexContents2, newExpectedIndex2);
     }
 }

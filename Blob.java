@@ -9,6 +9,8 @@ public class Blob {
     String sha1Contents;
 
     public Blob(String fileInput) throws IOException {
+        Index index = new Index();
+        index.init();
         fileName = fileInput;
         contents = getFileContents(fileName);
         sha1Contents = convertToSha1(contents);
@@ -63,7 +65,9 @@ public class Blob {
         return contents;
     }
 
-    ;public String getsha1Contents() {
+    ;
+
+    public String getsha1Contents() {
         return sha1Contents;
     }
 

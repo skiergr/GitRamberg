@@ -24,6 +24,10 @@ public class Tree {
 
     public static void main(String[] args) throws Exception {
         Tree tree = new Tree();
+        tree.add("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
+        tree.add("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
+        tree.remove("file1.txt");
+        tree.remove("bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
     }
 
     private ArrayList<String> entries;
@@ -31,6 +35,8 @@ public class Tree {
     private String currentFileName;
 
     public Tree() throws IOException {
+        Index index = new Index();
+        index.init();
 
         entries = new ArrayList<String>();
 
@@ -105,14 +111,13 @@ public class Tree {
         }
 
         br.close();
-
+        contents += line + "\n";
         String sha = convertToSha1(contents);
         File file = new File("test/objects/" + sha);
         File file2 = new File(currentFileName);
 
         file2.delete();
         file.createNewFile();
-
         currentFileName = "test/objects/" + sha;
 
         printHash();
@@ -130,12 +135,18 @@ public class Tree {
 
         String contents = "";
 
-        BufferedReader br = new BufferedReader(new FileReader(currentFileName));
+        /*
+         * BufferedReader br = new BufferedReader(new FileReader(currentFileName));
+         * 
+         * while (br.ready()) {
+         * contents += (char) br.read();
+         * }
+         * br.close();
+         */
 
-        while (br.ready()) {
-            contents += (char) br.read();
+        for (int i = 0; i < entries.size(); i++) {
+            contents += entries.get(i) + "\n";
         }
-        br.close();
 
         String sha = convertToSha1(contents);
 

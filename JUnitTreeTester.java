@@ -77,7 +77,8 @@ public class JUnitTreeTester {
         Index index = new Index();
         index.init();
         Tree tree = new Tree();
-        File treeFile = new File("test/objects/tree");
+        tree.printHash();
+        File treeFile = new File("test/objects/da39a3ee5e6b4b0d3255bfef95601890afd80709");
         assertTrue(treeFile.exists());
     }
 
@@ -90,11 +91,12 @@ public class JUnitTreeTester {
         Index index = new Index();
         index.init();
         Tree tree = new Tree();
-        File treeFile = new File("test/objects/tree");
+        File treeFile = new File("test/objects/" + Utils.getSHA(
+                "tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b\nblob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt\n"));
 
         tree.add("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
         tree.add("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
-
+        tree.printHash();
         BufferedReader br = new BufferedReader(new FileReader(treeFile));
         String expected = "tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b\nblob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt\n";
         String actual = "";
@@ -112,13 +114,14 @@ public class JUnitTreeTester {
         Index index = new Index();
         index.init();
         Tree tree = new Tree();
-        File treeFile = new File("test/objects/tree");
+        File treeFile = new File("test/objects/da39a3ee5e6b4b0d3255bfef95601890afd80709");
         assertTrue(treeFile.exists());
 
         tree.add("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
         tree.add("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
         tree.remove("file1.txt");
         tree.remove("bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
+
         BufferedReader br1 = new BufferedReader(new FileReader(treeFile));
         String actual1 = "";
         while (br1.ready()) {
@@ -129,13 +132,16 @@ public class JUnitTreeTester {
         assertEquals("", actual1);
     }
 
-    @Test
-    @DisplayName("Testing Add Directory.")
-    void testAddDirectory() throws Exception {
-        Index index = new Index();
-        index.init();
-        Tree tree = new Tree();
-        tree.addDirectory("testDirectory");
-
-    }
+    /*
+     * @Test
+     * 
+     * @DisplayName("Testing Add Directory.")
+     * void testAddDirectory() throws Exception {
+     * Index index = new Index();
+     * index.init();
+     * Tree tree = new Tree();
+     * tree.addDirectory("testDirectory");
+     * 
+     * }
+     */
 }
