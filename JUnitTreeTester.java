@@ -132,16 +132,13 @@ public class JUnitTreeTester {
         assertEquals("", actual1);
     }
 
-    /*
-     * @Test
-     * 
-     * @DisplayName("Testing Add Directory.")
-     * void testAddDirectory() throws Exception {
-     * Index index = new Index();
-     * index.init();
-     * Tree tree = new Tree();
-     * tree.addDirectory("testDirectory");
-     * 
-     * }
-     */
+    @Test
+    @DisplayName("Testing Add Directory.")
+    void testAddDirectory() throws Exception {
+        Index index = new Index();
+        index.init();
+        Tree tree = new Tree();
+        tree.addDirectory("testDirectory");
+
+    }
 }

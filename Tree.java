@@ -24,10 +24,7 @@ public class Tree {
 
     public static void main(String[] args) throws Exception {
         Tree tree = new Tree();
-        tree.add("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
-        tree.add("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt");
-        tree.remove("file1.txt");
-        tree.remove("bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b");
+        tree.addDirectory("directorytest");
     }
 
     private ArrayList<String> entries;
@@ -51,6 +48,40 @@ public class Tree {
             file.createNewFile();
 
         }
+    }
+
+    public String convertToSha1(File file) throws Exception {
+        String contents = "";
+
+        BufferedReader br = new BufferedReader(new FileReader(currentFileName));
+
+        while (br.ready()) {
+
+            contents += (char) br.read();
+        }
+
+        br.close();
+
+        String sha1 = "";
+
+        try {
+            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+            crypt.reset();
+
+            crypt.update(contents.getBytes("UTF-8"));
+
+            sha1 = byteToHex(crypt.digest());
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+
+            e.printStackTrace();
+
+        }
+
+        return sha1;
+
     }
 
     public String convertToSha1(String fileContents) {
@@ -176,34 +207,30 @@ public class Tree {
     }
 
     public String addDirectory(String directoryPath) throws Exception {
-        Tree tree = new Tree();
         File directory = new File(directoryPath);
-
+        if (!directory.exists()) {
+            throw new Exception("Directory does not exist");
+        }
         File[] list = directory.listFiles();
         for (int i = 0; i < list.length; i++) {
             File file = list[i];
             if (file.exists()) {
                 if (file.isDirectory()) {
-                    String childTree = addDirectory(file.getPath());
-                    tree.add("tree : " + childTree + " : " + file.getName());
+                    Tree childTree = new Tree();
+                    add("tree : " + childTree.addDirectory(file.getPath()) + " : " + file.getName());
                 }
                 if (file.isFile()) {
-                    Blob blob = new Blob(file.getPath());
-                    tree.add("blob : " + blob.getsha1Contents() + " : " + file.getName());
+                    String shaContents = convertToSha1(file);
+                    add("blob : " + shaContents + " : " + file.getName());
                 }
             } else {
                 throw new Exception("File or directy path does not exist");
             }
 
         }
-
-        sha = tree.getSha();
+        printHash();
         return sha;
 
-    }
-
-    public String getSha() {
-        return sha;
     }
 
 }
