@@ -24,7 +24,9 @@ public class Tree {
 
     public static void main(String[] args) throws Exception {
         Tree tree = new Tree();
-        tree.addDirectory("directorytest");
+        System.out.println(tree.addDirectory("directorytest"));
+        System.out.println(tree.getSHA());
+        System.out.println(tree.convertToSha1(new File("test1.txt")));
     }
 
     private ArrayList<String> entries;
@@ -53,7 +55,7 @@ public class Tree {
     public String convertToSha1(File file) throws Exception {
         String contents = "";
 
-        BufferedReader br = new BufferedReader(new FileReader(currentFileName));
+        BufferedReader br = new BufferedReader(new FileReader(file));
 
         while (br.ready()) {
 
@@ -228,7 +230,14 @@ public class Tree {
             }
 
         }
+
+        currentFileName = "test/objects/" + sha;
         printHash();
+        return sha;
+
+    }
+
+    public String getSHA() {
         return sha;
 
     }

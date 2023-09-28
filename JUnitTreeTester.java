@@ -135,10 +135,28 @@ public class JUnitTreeTester {
     @Test
     @DisplayName("Testing Add Directory.")
     void testAddDirectory() throws Exception {
+        File directory1 = new File("directory1");
+        Utils.createNewDirectory(directory1);
+
+        File directory1File1 = new File("directory1/file1.txt");
+        Utils.createNewFile(directory1File1, "testing1");
+
+        File directory1File2 = new File("directory1/file2.txt");
+        Utils.createNewFile(directory1File2, "testing2");
+
+        File directory1File3 = new File("directory1/file3.txt");
+        Utils.createNewFile(directory1File3, "testing3");
+
         Index index = new Index();
         index.init();
         Tree tree = new Tree();
-        tree.addDirectory("testDirectory");
+        String treeSHA1 = tree.addDirectory("directory1");
+        File treeFile1 = new File("test/objects/" + treeSHA1);
+
+        assertTrue("tree1 was not created", treeFile1.exists());
+
+        assertEquals("tree1 has the right contents", Utils.getFileContents(treeFile1),
+                "blob : 596b29ec9afea9e461a20610d150939b9c399d93 : file2.txt\nblob : e0a56a88c41f712d460ff97c54a499641685762b : file3.txt\nblob : ac250e4a00ff3144ae7689f0d23e8b26d06aa929 : file1.txt\n");
 
     }
 }

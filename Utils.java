@@ -1,3 +1,9 @@
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -28,5 +34,34 @@ public class Utils {
         String result = formatter.toString();
         formatter.close();
         return result;
+    }
+
+    public static void createNewFile(File file, String contents) throws IOException {
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        writeToFile(file, contents);
+    }
+
+    public static void createNewDirectory(File file) {
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+    }
+
+    public static void writeToFile(File file, String contents) throws IOException {
+        PrintWriter pw1 = new PrintWriter(new FileWriter(file));
+        pw1.print(contents);
+        pw1.close();
+    }
+
+    public static String getFileContents(File file) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader(file.getPath()));
+        StringBuilder contents = new StringBuilder();
+        while (reader.ready()) {
+            contents.append((char) reader.read());
+        }
+        reader.close();
+        return contents.toString();
     }
 }
