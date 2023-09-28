@@ -24,9 +24,8 @@ public class Tree {
 
     public static void main(String[] args) throws Exception {
         Tree tree = new Tree();
-        System.out.println(tree.addDirectory("directorytest"));
-        System.out.println(tree.getSHA());
-        System.out.println(tree.convertToSha1(new File("test1.txt")));
+        tree.addDirectory("directorytest");
+
     }
 
     private ArrayList<String> entries;
@@ -220,8 +219,7 @@ public class Tree {
                 if (file.isDirectory()) {
                     Tree childTree = new Tree();
                     add("tree : " + childTree.addDirectory(file.getPath()) + " : " + file.getName());
-                }
-                if (file.isFile()) {
+                } else if (file.isFile()) {
                     String shaContents = convertToSha1(file);
                     add("blob : " + shaContents + " : " + file.getName());
                 }

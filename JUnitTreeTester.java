@@ -135,6 +135,8 @@ public class JUnitTreeTester {
     @Test
     @DisplayName("Testing Add Directory.")
     void testAddDirectory() throws Exception {
+
+        // test 1
         File directory1 = new File("directory1");
         Utils.createNewDirectory(directory1);
 
@@ -155,8 +157,41 @@ public class JUnitTreeTester {
 
         assertTrue("tree1 was not created", treeFile1.exists());
 
-        assertEquals("tree1 has the right contents", Utils.getFileContents(treeFile1),
+        assertEquals("tree1 has the wrong contents", Utils.getFileContents(treeFile1),
                 "blob : 596b29ec9afea9e461a20610d150939b9c399d93 : file2.txt\nblob : e0a56a88c41f712d460ff97c54a499641685762b : file3.txt\nblob : ac250e4a00ff3144ae7689f0d23e8b26d06aa929 : file1.txt\n");
 
+        // test2
+        File directory2 = new File("directory2");
+        Utils.createNewDirectory(directory2);
+
+        File directory2File1 = new File("directory2/file1.txt");
+        Utils.createNewFile(directory2File1, "testing1");
+
+        File directory2File2 = new File("directory2/file2.txt");
+        Utils.createNewFile(directory2File2, "testing2");
+
+        File directory2File3 = new File("directory2/file3.txt");
+        Utils.createNewFile(directory2File3, "testing3");
+
+        File directory2Directory1 = new File("directory2/directory1");
+        Utils.createNewDirectory(directory2Directory1);
+
+        File directory2directory2 = new File("directory2/directory2");
+        Utils.createNewDirectory(directory2directory2);
+
+        File directory2Directory2File1 = new File("directory2/directory2/file1.txt");
+        Utils.createNewFile(directory2Directory2File1, "testing4");
+
+        Tree tree2 = new Tree();
+        String treeSHA2 = tree2.addDirectory("directory2");
+        File treeFile2 = new File("test/objects/" + treeSHA2);
+
+        // assertTrue("tree2 was not created", treeFile2.exists());
+
+        // assertEquals("tree2 has the wrong contents",
+        // Utils.getFileContents(treeFile2),
+        // "blob : 596b29ec9afea9e461a20610d150939b9c399d93 : file2.txt\nblob :
+        // e0a56a88c41f712d460ff97c54a499641685762b : file3.txt\nblob :
+        // ac250e4a00ff3144ae7689f0d23e8b26d06aa929 : file1.txt\n");
     }
 }
