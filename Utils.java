@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Formatter;
 
 public class Utils {
@@ -63,5 +65,10 @@ public class Utils {
         }
         reader.close();
         return contents.toString();
+    }
+
+    public static String getDate() {
+        String timeStamp = new SimpleDateFormat("MM-dd-YYYY").format(Calendar.getInstance().getTime());
+        return timeStamp;
     }
 }
