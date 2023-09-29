@@ -21,6 +21,7 @@ import java.util.Formatter;
 public class Tree {
 
     String sha;
+    Index index;
 
     public static void main(String[] args) throws Exception {
         Tree tree = new Tree();
@@ -33,7 +34,7 @@ public class Tree {
     private String currentFileName;
 
     public Tree() throws IOException {
-        Index index = new Index();
+        index = new Index();
         index.init();
 
         entries = new ArrayList<String>();
@@ -51,7 +52,7 @@ public class Tree {
         }
     }
 
-    public String convertToSha1(File file) throws Exception {
+    public static String convertToSha1(File file) throws Exception {
         String contents = "";
 
         BufferedReader br = new BufferedReader(new FileReader(file));
