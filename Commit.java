@@ -1,4 +1,6 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -10,6 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.Formatter;
 import java.util.LinkedList;
+import java.io.BufferedReader;
 
 public class Commit {
 
@@ -18,9 +21,10 @@ public class Commit {
     static String prevCommitContents2; // commit contents after the line we skip
 
     // first commit ever
-    public Commit(String author, String summary) throws IOException {
+    public Commit(String author, String summary) throws Exception {
         StringBuilder total = new StringBuilder(""); // contains everything needed to make sha1 of commit name
-        String treeSha = treeToObjects();
+        Tree tree = new Tree();
+        String treeSha = getTreeSha(tree);
         String date = getDate();
 
         total.append(treeSha);
@@ -47,9 +51,10 @@ public class Commit {
     }
 
     // not the first commit
-    public Commit(String parentCommit, String author, String summary) throws IOException {
+    public Commit(String parentCommit, String author, String summary) throws Exception {
         StringBuilder total = new StringBuilder("");
-        String treeSha = treeToObjects();
+        Tree tree = new Tree();
+        String treeSha = getTreeSha(tree);
         String date = getDate();
 
         total.append(treeSha);
@@ -83,12 +88,34 @@ public class Commit {
 
     // creates an object Tree and saves it to the objects folder, returns the sha
     // value of the tree contents
-    public String treeToObjects() throws IOException {
-        Tree tr = new Tree();
-        String s = tr.convertToSha1("placeholder");
-        File treeFile = new File("test/objects/" + s);
-        treeFile.createNewFile();
-        return s;
+    public String getTreeSha(Tree tree) throws Exception {
+        addIndexToTree(tree);
+        clearFile("/test/index");
+
+        return tree.getSHA();
+    }
+
+    public void addIndexToTree(Tree tree) throws Exception {
+        File index = new File("/test/index");
+        if (!index.exists()) {
+            throw new Exception("file does not exist");
+        }
+        BufferedReader br = new BufferedReader(new FileReader(index));
+        String line;
+        while (br.ready()) {
+            line = br.readLine();
+            tree.add(line);
+        }
+        br.close();
+
+    }
+
+    public void clearFile(String path) throws Exception {
+        File file = new File(path);
+        if (!file.exists()) {
+            throw new Exception("file does not exist");
+        }
+        file.delete();
     }
 
     public String getDate() {
@@ -136,7 +163,7 @@ public class Commit {
         return result;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         // i still haven't figured out junit tests, so i test this way
         Commit c0 = new Commit("Mr. Stout", "Did I ever tell you I like durian?");
         Commit c1 = new Commit("dc80b65beb1bf8398a6d7fd3e6c15d7524624276", "Mr. Stout", "I like pugs");
@@ -148,4 +175,5 @@ public class Commit {
 
         // also the 'next' pointer is not working
     }
+
 }
