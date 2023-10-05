@@ -14,7 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class JUnitIndexTester {
-    private static String testFile = "testFile";
+    private static String testFile = "testfile";
     private static String testFileContents = "SHA1 Test";
     private static String testFileSha = "8345afc8180a8ea7f76903ad3b70c1c9180bb2e0";
     private static String testFile2 = "testfile2";
@@ -23,9 +23,9 @@ public class JUnitIndexTester {
     private static String testFile3 = "testfile3";
     private static String testFile3Contents = "#3 testing";
     private static String testFile3Sha = "b055f09351c99e93474bf62e55504c9b115214ca";
-    private static String expectedIndex = "testFile : 8345afc8180a8ea7f76903ad3b70c1c9180bb2e0\n" + //
-            "testfile2 : f4b774b6be2cbfab5d69687fa6445453d0527bde\n" + //
-            "testfile3 : b055f09351c99e93474bf62e55504c9b115214ca\n";
+    private static String expectedIndex = "blob : f4b774b6be2cbfab5d69687fa6445453d0527bde : testfile2\n" + //
+            "blob : 8345afc8180a8ea7f76903ad3b70c1c9180bb2e0 : testfile\n" + //
+            "blob : b055f09351c99e93474bf62e55504c9b115214ca : testfile3\n";
 
     @BeforeAll
     static void setUp() throws Exception {
@@ -148,7 +148,7 @@ public class JUnitIndexTester {
             newIndexContents += (char) br1.read();
         }
         br1.close();
-        String newExpectedIndex = "testfile2 : f4b774b6be2cbfab5d69687fa6445453d0527bde\ntestfile3 : b055f09351c99e93474bf62e55504c9b115214ca\n";
+        String newExpectedIndex = "blob : f4b774b6be2cbfab5d69687fa6445453d0527bde : testfile2\nblob : b055f09351c99e93474bf62e55504c9b115214ca : testfile3\n";
         // tests that the entries were removed from the index
         assertEquals("index is correct", newIndexContents, newExpectedIndex);
 

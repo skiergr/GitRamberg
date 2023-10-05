@@ -57,10 +57,10 @@ public class Index {
     public void rewriteIndex() throws IOException {
         FileWriter writer = new FileWriter(indexRelativePath);
         for (String fileName : indexMap.keySet()) {
-            writer.write("Blob : " + indexMap.get(fileName) + " : " + fileName + "\n");
+            writer.write("blob : " + indexMap.get(fileName) + " : " + fileName + "\n");
         }
         for (String directoryName : treeMap.keySet()) {
-            writer.write("Tree : " + treeMap.get(directoryName) + " : " + directoryName + "\n");
+            writer.write("tree : " + treeMap.get(directoryName) + " : " + directoryName + "\n");
         }
 
         writer.close();
