@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,12 +17,19 @@ import java.io.BufferedReader;
 
 public class Commit {
 
+    static String commitSha;
     static String prevCommitSha;
     static String prevCommitContents1; // commit contents before the line we skip
     static String prevCommitContents2; // commit contents after the line we skip
 
+    public static void main(String[] args) throws Exception {
+        Commit commit = new Commit("author", "summary");
+    }
+
     // first commit ever
     public Commit(String author, String summary) throws Exception {
+        Index index = new Index();
+        index.init();
         StringBuilder total = new StringBuilder(""); // contains everything needed to make sha1 of commit name
         Tree tree = new Tree();
         String treeSha = getTreeSha(tree);
@@ -32,7 +40,7 @@ public class Commit {
         total.append("\n\n" + author);
         total.append("\n" + date);
         total.append("\n" + summary);
-        String commitSha = convertToSha1(total.toString());
+        commitSha = convertToSha1(total.toString());
 
         prevCommitSha = commitSha; // so that the later commits can find the previous commit
         prevCommitContents1 = treeSha + " \n";
@@ -52,6 +60,8 @@ public class Commit {
 
     // not the first commit
     public Commit(String parentCommit, String author, String summary) throws Exception {
+        Index index = new Index();
+        index.init();
         StringBuilder total = new StringBuilder("");
         Tree tree = new Tree();
         String treeSha = getTreeSha(tree);
@@ -62,7 +72,7 @@ public class Commit {
         total.append("\n\n" + author);
         total.append("\n" + date);
         total.append(summary);
-        String commitSha = convertToSha1(total.toString());
+        commitSha = convertToSha1(total.toString());
 
         File commitList = new File("test/objects/" + commitSha);
         PrintWriter pw = new PrintWriter(commitList);
@@ -90,13 +100,13 @@ public class Commit {
     // value of the tree contents
     public String getTreeSha(Tree tree) throws Exception {
         addIndexToTree(tree);
-        clearFile("/test/index");
+        clearFile("./test/index");
 
         return tree.getSHA();
     }
 
     public void addIndexToTree(Tree tree) throws Exception {
-        File index = new File("/test/index");
+        File index = new File("./test/index");
         if (!index.exists()) {
             throw new Exception("file does not exist");
         }
@@ -163,17 +173,22 @@ public class Commit {
         return result;
     }
 
-    public static void main(String[] args) throws Exception {
-        // i still haven't figured out junit tests, so i test this way
-        Commit c0 = new Commit("Mr. Stout", "Did I ever tell you I like durian?");
-        Commit c1 = new Commit("dc80b65beb1bf8398a6d7fd3e6c15d7524624276", "Mr. Stout", "I like pugs");
-
-        // well, it's certainly creating files. However, the sha1 method does not appear
-        // to be working properly
-        // at least, the sha1 values being generated are not correct
-        // talk to grady/whoever got this before me during class
-
-        // also the 'next' pointer is not working
+    public void updatePreviousCommit() throws Exception {
+        File prevCommit = new File("./test/objects/" + prevCommitSha);
+        if (prevCommit.exists()) {
+            StringBuilder sb = new StringBuilder();
+            BufferedReader br = new BufferedReader(new FileReader(prevCommit));
+            sb.append(br.readLine() + "\n");
+            sb.append(br.readLine() + "\n");
+            sb.append(commitSha);
+            sb.append(br.readLine() + "\n");
+            sb.append(br.readLine() + "\n");
+            sb.append(br.readLine() + "\n");
+            br.close();
+            PrintWriter pw = new PrintWriter(prevCommit);
+            pw.write(sb.toString());
+            pw.close();
+        }
     }
 
 }

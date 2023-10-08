@@ -186,12 +186,9 @@ public class JUnitTreeTester {
         String treeSHA2 = tree2.addDirectory("directory2");
         File treeFile2 = new File("test/objects/" + treeSHA2);
 
-        // assertTrue("tree2 was not created", treeFile2.exists());
+        assertTrue("tree2 was not created", treeFile2.exists());
 
-        // assertEquals("tree2 has the wrong contents",
-        // Utils.getFileContents(treeFile2),
-        // "blob : 596b29ec9afea9e461a20610d150939b9c399d93 : file2.txt\nblob :
-        // e0a56a88c41f712d460ff97c54a499641685762b : file3.txt\nblob :
-        // ac250e4a00ff3144ae7689f0d23e8b26d06aa929 : file1.txt\n");
+        assertEquals("tree2 has the wrong contents", Utils.getFileContents(treeFile2),
+                "blob : 596b29ec9afea9e461a20610d150939b9c399d93 : file2.txt\nblob :e0a56a88c41f712d460ff97c54a499641685762b : file3.txt\nblob :ac250e4a00ff3144ae7689f0d23e8b26d06aa929 : file1.txt\n");
     }
 }
