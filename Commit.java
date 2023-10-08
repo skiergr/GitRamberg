@@ -42,10 +42,6 @@ public class Commit {
         total.append("\n" + summary);
         commitSha = convertToSha1(total.toString());
 
-        prevCommitSha = commitSha; // so that the later commits can find the previous commit
-        prevCommitContents1 = treeSha + " \n";
-        prevCommitContents2 = author + "\n" + date + "\n" + summary;
-
         File commitList = new File("test/objects/" + commitSha);
         PrintWriter pw = new PrintWriter(commitList);
         pw.println(treeSha);
@@ -85,15 +81,8 @@ public class Commit {
 
         pw.close();
 
-        // now i need to update the old commit so that it points to the next
-        PrintWriter pww = new PrintWriter(prevCommitSha);
-        pww.println(prevCommitContents1);
-        pww.println("\n");
-        pww.println(commitSha); // this is the sha value for the current commit
-        pww.println(prevCommitContents2);
-        pww.close();
+        updatePreviousCommit();
 
-        prevCommitSha = commitSha; // updates the prevCommitSha to get ready for the next one
     }
 
     // creates an object Tree and saves it to the objects folder, returns the sha
