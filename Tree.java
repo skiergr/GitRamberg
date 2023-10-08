@@ -145,7 +145,7 @@ public class Tree {
 
         br.close();
         contents += line + "\n";
-        String sha = convertToSha1(contents);
+        sha = convertToSha1(contents);
         File file = new File("test/objects/" + sha);
         File file2 = new File(currentFileName);
 
@@ -181,7 +181,7 @@ public class Tree {
             contents += entries.get(i) + "\n";
         }
 
-        String sha = convertToSha1(contents);
+        sha = convertToSha1(contents);
 
         File file = new File("test/objects/" + sha);
         File file2 = new File(currentFileName);

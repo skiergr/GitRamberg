@@ -23,7 +23,16 @@ public class Commit {
     static String prevCommitContents2; // commit contents after the line we skip
 
     public static void main(String[] args) throws Exception {
-        Commit commit = new Commit("author", "summary");
+        File test1 = new File("test1");
+        Utils.createNewFile(test1, "testing1");
+        File test2 = new File("test2");
+        Utils.createNewFile(test2, "testing2");
+        Index index = new Index();
+        index.init();
+        index.add("test1");
+        index.add("test2");
+        Commit c0 = new Commit("da39a3ee5e6b4b0d3255bfef95601890afd80709", "name", "summary");
+        File commitFile = new File("./tsest/objects/" + c0.getCommitSha());
     }
 
     // first commit ever
@@ -178,6 +187,10 @@ public class Commit {
             pw.write(sb.toString());
             pw.close();
         }
+    }
+
+    public String getCommitSha() {
+        return commitSha;
     }
 
 }

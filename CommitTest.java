@@ -1,7 +1,9 @@
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -32,10 +34,9 @@ public class CommitTest {
     }
 
     @Test
-    void testConvertToSha1() {
-        // not gonna test this because i know it doesn't work
-        // copied this method directly from tree class
-        // og person, fix this plz
+    void testConvertToSha1() throws Exception {
+        c0 = new Commit("author", "summary");
+        assertEquals("convert to sha does not work", Utils.getSHA("hello"), c0.convertToSha1("hello"));
     }
 
     // makes sure the getDate gets the correct value
@@ -46,4 +47,20 @@ public class CommitTest {
         String d = c0.getDate();
         assertEquals("Date incorrect", d, Utils.getDate()); // only works for today's date until i edit the tester
     }
+
+    @Test
+    void testCreating1Commit() throws Exception {
+        File test1 = new File("test1");
+        Utils.createNewFile(test1, "testing1");
+        File test2 = new File("test2");
+        Utils.createNewFile(test2, "testing2");
+        Index index = new Index();
+        index.init();
+        index.add("test1");
+        index.add("test2");
+        c0 = new Commit("da39a3ee5e6b4b0d3255bfef95601890afd80709", "name", "summary");
+        File commitFile = new File("./tsest/objects/" + c0.getCommitSha());
+        assertTrue("commit was not created", commitFile.exists());
+    }
+
 }
