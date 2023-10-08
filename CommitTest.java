@@ -12,14 +12,14 @@ public class CommitTest {
 
     // tests if the commit is being correctly generated
     @Test
-    void createACommit() throws IOException {
+    void createACommit() throws Exception {
         c0 = new Commit("name", "summary");
 
         BufferedReader br = new BufferedReader(new FileReader("test/objects/" + Utils.getSHA(
-                "ff55435345834a3fe224936776c2aa15f6ed5358\n\n\nname\n" + Utils.getDate() + "\nsummary")));
+                "da39a3ee5e6b4b0d3255bfef95601890afd80709\n\n\nname\n" + Utils.getDate() + "\nsummary")));
         // this is the sha1 of the contents of c0, generated with my own method (not the
         // one in this project)
-        String expected = "ff55435345834a3fe224936776c2aa15f6ed5358\n\n\nname\n" + Utils.getDate() + "\nsummary";
+        String expected = "da39a3ee5e6b4b0d3255bfef95601890afd80709\n\n\nname\n" + Utils.getDate() + "\nsummary";
         String actual = "";
         while (br.ready()) {
             actual += (char) br.read();
@@ -40,7 +40,7 @@ public class CommitTest {
 
     // makes sure the getDate gets the correct value
     @Test
-    void testGetDate() throws IOException {
+    void testGetDate() throws Exception {
         c0 = new Commit("name", "summary");
 
         String d = c0.getDate();
