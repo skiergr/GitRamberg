@@ -17,34 +17,29 @@ import java.io.BufferedReader;
 
 public class Commit {
 
-    static String commitSha;
-    static String prevCommitSha;
-    static String prevCommitContents1; // commit contents before the line we skip
-    static String prevCommitContents2; // commit contents after the line we skip
+    String commitSha;
+    String prevCommitSha;
+    String prevCommitContents1; // commit contents before the line we skip
+    String prevCommitContents2; // commit contents after the line we skip
 
     public static void main(String[] args) throws Exception {
-        // System.out.println("0ff646c7cad33ab7059d2815e43bfa738aa62dfb"
-        // + "\nda39a3ee5e6b4b0d3255bfef95601890afd80709\n\nname\n" + Utils.getDate()
-        // + "\nsummary");
-        System.out.println(Utils.getSHA("0ff646c7cad33ab7059d2815e43bfa738aa62dfb"
-                + "\nda39a3ee5e6b4b0d3255bfef95601890afd80709\n\nname\n" + Utils.getDate()
-                + "\nsummary"));
+        File test1 = new File("test1");
+        Utils.createNewFile(test1, "testing1");
+        File test2 = new File("test2");
+        Utils.createNewFile(test2, "testing2");
+        Index index = new Index();
+        index.init();
+        index.add("test1");
+        index.add("test2");
+        Commit c0 = new Commit("da39a3ee5e6b4b0d3255bfef95601890afd80709", "name", "summary");
 
-        Commit c0 = new Commit("author", "summary");
-        System.out.println(c0.convertToSha1("0ff646c7cad33ab7059d2815e43bfa738aa62dfb"
-                + "\nda39a3ee5e6b4b0d3255bfef95601890afd80709\n\nname\n" + Utils.getDate()
-                + "\nsummary"));
+        String test1Sha = Utils.getSHA(Utils.getFileContents(test1));
+        String test2Sha = Utils.getSHA(Utils.getFileContents(test2));
+        String treeContents = "blob : " + test2Sha + " : test2\nblob : " + test1Sha + " : test1\n";
+        String treeSha = Utils.getSHA(treeContents);
 
-        // File test1 = new File("test1");
-        // Utils.createNewFile(test1, "testing1");
-        // File test2 = new File("test2");
-        // Utils.createNewFile(test2, "testing2");
-        // Index index = new Index();
-        // index.init();
-        // index.add("test1");
-        // index.add("test2");
-        // Commit c0 = new Commit("da39a3ee5e6b4b0d3255bfef95601890afd80709", "name",
-        // "summary");
+        System.out.println(Utils.getSHA(
+                "0ff646c7cad33ab7059d2815e43bfa738aa62dfb\nda39a3ee5e6b4b0d3255bfef95601890afd80709\n\nname\n10-08-2023\nsummary"));
     }
 
     // first commit ever
@@ -79,7 +74,7 @@ public class Commit {
     public Commit(String parentCommit, String author, String summary) throws Exception {
         Index index = new Index();
         index.init();
-        StringBuilder total = new StringBuilder("");
+        StringBuilder total = new StringBuilder();
         Tree tree = new Tree();
         String treeSha = getTreeSha(tree);
         String date = getDate();
@@ -88,7 +83,7 @@ public class Commit {
         total.append("\n" + parentCommit);
         total.append("\n\n" + author);
         total.append("\n" + date);
-        total.append(summary);
+        total.append("\n" + summary);
         commitSha = convertToSha1(total.toString());
 
         File commitList = new File("test/objects/" + commitSha);
@@ -173,7 +168,7 @@ public class Commit {
     }
 
     // Used for sha1
-    private static String byteToHex(final byte[] hash) {
+    private String byteToHex(final byte[] hash) {
         Formatter formatter = new Formatter();
         for (byte b : hash) {
             formatter.format("%02x", b);
