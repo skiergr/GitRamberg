@@ -59,8 +59,24 @@ public class CommitTest {
         index.add("test1");
         index.add("test2");
         c0 = new Commit("da39a3ee5e6b4b0d3255bfef95601890afd80709", "name", "summary");
-        File commitFile = new File("./tsest/objects/" + c0.getCommitSha());
-        assertTrue("commit was not created", commitFile.exists());
+
+        String test1Sha = Utils.getSHA(Utils.getFileContents(test1));
+        String test2Sha = Utils.getSHA(Utils.getFileContents(test2));
+        String treeContents = "blob : " + test2Sha + " : test2\nblob : " + test1Sha + " : test1\n";
+        String treeSha = Utils.getSHA(treeContents);
+        String commitContents = treeSha + "\nda39a3ee5e6b4b0d3255bfef95601890afd80709\n\nname\n" + Utils.getDate()
+                + "\nsummary";
+        String commitSha = Utils.getSHA(commitContents);
+
+        File treeFile = new File("./test/objects/" + treeSha);
+        File commitFile = new File("./test/objects/" + commitSha);
+
+        assertTrue("tree does not exist", treeFile.exists());
+        assertEquals("tree has wrong contents", Utils.getFileContents(treeFile), treeContents);
+
+        assertTrue("commit does not exist", commitFile.exists());
+        assertEquals("commit has wrong contents", Utils.getFileContents(commitFile), commitContents);
+
     }
 
 }

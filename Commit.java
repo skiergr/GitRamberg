@@ -23,16 +23,28 @@ public class Commit {
     static String prevCommitContents2; // commit contents after the line we skip
 
     public static void main(String[] args) throws Exception {
-        File test1 = new File("test1");
-        Utils.createNewFile(test1, "testing1");
-        File test2 = new File("test2");
-        Utils.createNewFile(test2, "testing2");
-        Index index = new Index();
-        index.init();
-        index.add("test1");
-        index.add("test2");
-        Commit c0 = new Commit("da39a3ee5e6b4b0d3255bfef95601890afd80709", "name", "summary");
-        File commitFile = new File("./tsest/objects/" + c0.getCommitSha());
+        // System.out.println("0ff646c7cad33ab7059d2815e43bfa738aa62dfb"
+        // + "\nda39a3ee5e6b4b0d3255bfef95601890afd80709\n\nname\n" + Utils.getDate()
+        // + "\nsummary");
+        System.out.println(Utils.getSHA("0ff646c7cad33ab7059d2815e43bfa738aa62dfb"
+                + "\nda39a3ee5e6b4b0d3255bfef95601890afd80709\n\nname\n" + Utils.getDate()
+                + "\nsummary"));
+
+        Commit c0 = new Commit("author", "summary");
+        System.out.println(c0.convertToSha1("0ff646c7cad33ab7059d2815e43bfa738aa62dfb"
+                + "\nda39a3ee5e6b4b0d3255bfef95601890afd80709\n\nname\n" + Utils.getDate()
+                + "\nsummary"));
+
+        // File test1 = new File("test1");
+        // Utils.createNewFile(test1, "testing1");
+        // File test2 = new File("test2");
+        // Utils.createNewFile(test2, "testing2");
+        // Index index = new Index();
+        // index.init();
+        // index.add("test1");
+        // index.add("test2");
+        // Commit c0 = new Commit("da39a3ee5e6b4b0d3255bfef95601890afd80709", "name",
+        // "summary");
     }
 
     // first commit ever
