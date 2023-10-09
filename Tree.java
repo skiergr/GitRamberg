@@ -41,29 +41,29 @@ public class Tree {
 
         sha = convertToSha1("");
 
-        File file = new File("test/objects/" + sha);
+        // File file = new File("test/objects/" + sha);
 
         this.currentFileName = "test/objects/" + sha;
 
-        if (!file.exists()) {
+        // if (!file.exists()) {
 
-            file.createNewFile();
+        // file.createNewFile();
 
-        }
+        // }
     }
 
     public static String convertToSha1(File file) throws Exception {
         String contents = "";
+        if (file.exists()) {
+            BufferedReader br = new BufferedReader(new FileReader(file));
 
-        BufferedReader br = new BufferedReader(new FileReader(file));
+            while (br.ready()) {
 
-        while (br.ready()) {
+                contents += (char) br.read();
+            }
 
-            contents += (char) br.read();
+            br.close();
         }
-
-        br.close();
-
         String sha1 = "";
 
         try {
@@ -136,14 +136,17 @@ public class Tree {
 
         String contents = "";
 
-        BufferedReader br = new BufferedReader(new FileReader(currentFileName));
+        File currentFile = new File(currentFileName);
+        if (currentFile.exists()) {
+            BufferedReader br = new BufferedReader(new FileReader(currentFileName));
 
-        while (br.ready()) {
+            while (br.ready()) {
 
-            contents += (char) br.read();
+                contents += (char) br.read();
+            }
+
+            br.close();
         }
-
-        br.close();
         contents += line + "\n";
         sha = convertToSha1(contents);
         File file = new File("test/objects/" + sha);
@@ -212,6 +215,9 @@ public class Tree {
         File directory = new File(directoryPath);
         if (!directory.exists()) {
             throw new Exception("Directory does not exist");
+        }
+        if (!directory.canRead()) {
+            throw new Exception("Directory is not readable");
         }
         File[] list = directory.listFiles();
         for (int i = 0; i < list.length; i++) {

@@ -19,27 +19,34 @@ public class Commit {
 
     String commitSha;
     String prevCommitSha;
-    String prevCommitContents1; // commit contents before the line we skip
-    String prevCommitContents2; // commit contents after the line we skip
+    String treeSha;
 
     public static void main(String[] args) throws Exception {
         File test1 = new File("test1");
         Utils.createNewFile(test1, "testing1");
         File test2 = new File("test2");
         Utils.createNewFile(test2, "testing2");
+        File directory = new File("directory");
+        Utils.createNewDirectory(directory);
         Index index = new Index();
         index.init();
         index.add("test1");
         index.add("test2");
-        Commit c0 = new Commit("da39a3ee5e6b4b0d3255bfef95601890afd80709", "name", "summary");
+        index.add("directory");
+        Commit c0 = new Commit("name", "summary");
 
-        String test1Sha = Utils.getSHA(Utils.getFileContents(test1));
-        String test2Sha = Utils.getSHA(Utils.getFileContents(test2));
-        String treeContents = "blob : " + test2Sha + " : test2\nblob : " + test1Sha + " : test1\n";
-        String treeSha = Utils.getSHA(treeContents);
-
-        System.out.println(Utils.getSHA(
-                "0ff646c7cad33ab7059d2815e43bfa738aa62dfb\nda39a3ee5e6b4b0d3255bfef95601890afd80709\n\nname\n10-08-2023\nsummary"));
+        // File test3 = new File("test3");
+        // Utils.createNewFile(test3, "testing3");
+        // File test4 = new File("test4");
+        // Utils.createNewFile(test4, "testing4");
+        // File directory = new File("directory");
+        // Utils.createNewDirectory(directory);
+        // Index index2 = new Index();
+        // index2.init();
+        // index2.add("test3");
+        // index2.add("test4");
+        // index2.add("directory");
+        // Commit c1 = new Commit(c0.getCommitSha(), "name", "summary");
     }
 
     // first commit ever
@@ -48,7 +55,7 @@ public class Commit {
         index.init();
         StringBuilder total = new StringBuilder(""); // contains everything needed to make sha1 of commit name
         Tree tree = new Tree();
-        String treeSha = getTreeSha(tree);
+        String treeSha = createTree(tree);
         String date = getDate();
 
         total.append(treeSha);
@@ -76,7 +83,7 @@ public class Commit {
         index.init();
         StringBuilder total = new StringBuilder();
         Tree tree = new Tree();
-        String treeSha = getTreeSha(tree);
+        treeSha = createTree(tree);
         String date = getDate();
 
         total.append(treeSha);
@@ -96,18 +103,22 @@ public class Commit {
         pw.print(summary);
 
         pw.close();
-
+        prevCommitSha = parentCommit;
         updatePreviousCommit();
 
     }
 
     // creates an object Tree and saves it to the objects folder, returns the sha
     // value of the tree contents
-    public String getTreeSha(Tree tree) throws Exception {
+    public String createTree(Tree tree) throws Exception {
         addIndexToTree(tree);
         clearFile("./test/index");
 
         return tree.getSHA();
+    }
+
+    public String getTreeSha() {
+        return treeSha;
     }
 
     public void addIndexToTree(Tree tree) throws Exception {
@@ -188,11 +199,13 @@ public class Commit {
             sb.append(commitSha);
             sb.append(br.readLine() + "\n");
             sb.append(br.readLine() + "\n");
-            sb.append(br.readLine() + "\n");
+            sb.append(br.readLine());
             br.close();
             PrintWriter pw = new PrintWriter(prevCommit);
             pw.write(sb.toString());
             pw.close();
+        } else {
+            throw new Exception("bro what");
         }
     }
 
