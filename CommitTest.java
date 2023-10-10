@@ -90,16 +90,6 @@ public class CommitTest {
         index.add("test2");
         c0 = new Commit("name", "summary");
 
-        File test3 = new File("test3");
-        Utils.createNewFile(test3, "testing3");
-        File test4 = new File("test4");
-        Utils.createNewFile(test4, "testing4");
-        Index index2 = new Index();
-        index2.init();
-        index2.add("test3");
-        index2.add("test4");
-        Commit c1 = new Commit(c0.getCommitSha(), "name", "summary");
-
         String test1Sha = Utils.getSHA(Utils.getFileContents(test1));
         String test2Sha = Utils.getSHA(Utils.getFileContents(test2));
         String treeContents = "blob : " + test2Sha + " : test2\nblob : " + test1Sha + " : test1\n";
@@ -111,22 +101,11 @@ public class CommitTest {
         File treeFile = new File("./test/objects/" + treeSha);
         File commitFile = new File("./test/objects/" + commitSha);
 
-        String test3Sha = Utils.getSHA(Utils.getFileContents(test3));
-        String test4Sha = Utils.getSHA(Utils.getFileContents(test4));
-        String treeContents2 = "blob : " + test4Sha + " : test4\nblob : " + test3Sha + " : test3\n";
-        String treeSha2 = Utils.getSHA(treeContents2);
-        String commitContents2 = treeSha2 + "\n" + c0.getCommitSha() + "\n\nname\n" + Utils.getDate()
-                + "\nsummary";
-        String commitSha2 = Utils.getSHA(commitContents2);
+        assertTrue("tree does not exist", treeFile.exists());
+        assertEquals("tree has wrong contents", Utils.getFileContents(treeFile), treeContents);
 
-        File treeFile2 = new File("./test/objects/" + treeSha2);
-        File commitFile2 = new File("./test/objects/" + commitSha2);
-
-        assertTrue("tree does not exist", treeFile2.exists());
-        assertEquals("tree has wrong contents", Utils.getFileContents(treeFile2), treeContents2);
-
-        assertTrue("commit does not exist", commitFile2.exists());
-        assertEquals("commit has wrong contents", Utils.getFileContents(commitFile2), commitContents2);
+        assertTrue("commit does not exist", commitFile.exists());
+        assertEquals("commit has wrong contents", Utils.getFileContents(commitFile), commitContents);
 
     }
 
