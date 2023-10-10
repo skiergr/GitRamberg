@@ -10,12 +10,11 @@ import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
 public class CommitTest {
-    Commit c0;
 
     // tests if the commit is being correctly generated
     @Test
     void createACommit() throws Exception {
-        c0 = new Commit("name", "summary");
+        Commit c0 = new Commit("name", "summary");
 
         BufferedReader br = new BufferedReader(new FileReader("test/objects/" + Utils.getSHA(
                 "da39a3ee5e6b4b0d3255bfef95601890afd80709\n\n\nname\n" + Utils.getDate() + "\nsummary")));
@@ -35,14 +34,14 @@ public class CommitTest {
 
     @Test
     void testConvertToSha1() throws Exception {
-        c0 = new Commit("author", "summary");
+        Commit c0 = new Commit("author", "summary");
         assertEquals("convert to sha does not work", Utils.getSHA("hello"), c0.convertToSha1("hello"));
     }
 
     // makes sure the getDate gets the correct value
     @Test
     void testGetDate() throws Exception {
-        c0 = new Commit("name", "summary");
+        Commit c0 = new Commit("name", "summary");
 
         String d = c0.getDate();
         assertEquals("Date incorrect", d, Utils.getDate()); // only works for today's date until i edit the tester
@@ -58,7 +57,7 @@ public class CommitTest {
         index.init();
         index.add("test1");
         index.add("test2");
-        c0 = new Commit("name", "summary");
+        Commit c0 = new Commit("name", "summary");
 
         String test1Sha = Utils.getSHA(Utils.getFileContents(test1));
         String test2Sha = Utils.getSHA(Utils.getFileContents(test2));
@@ -88,7 +87,7 @@ public class CommitTest {
         index.init();
         index.add("test1");
         index.add("test2");
-        c0 = new Commit("name", "summary");
+        Commit c0 = new Commit("name", "summary");
 
         String test1Sha = Utils.getSHA(Utils.getFileContents(test1));
         String test2Sha = Utils.getSHA(Utils.getFileContents(test2));
@@ -119,7 +118,7 @@ public class CommitTest {
         index.init();
         index.add("test1");
         index.add("test2");
-        c0 = new Commit("name", "summary");
+        Commit c0 = new Commit("name", "summary");
 
         File test3 = new File("test3");
         Utils.createNewFile(test3, "testing3");
@@ -140,6 +139,8 @@ public class CommitTest {
         String treeSha = Utils.getSHA(treeContents);
         String commitContents = treeSha + "\n\n\nname\n" + Utils.getDate()
                 + "\nsummary";
+        String newCommitContents = treeSha + "\n\n" + c1.getCommitSha() + "\nname\n" + Utils.getDate()
+                + "\nsummary";
         String commitSha = Utils.getSHA(commitContents);
 
         File treeFile = new File("./test/objects/" + treeSha);
@@ -147,16 +148,26 @@ public class CommitTest {
 
         String test3Sha = Utils.getSHA(Utils.getFileContents(test3));
         String test4Sha = Utils.getSHA(Utils.getFileContents(test4));
-        String treeContents2 = "blob : " + test4Sha + " : test4\nblob : " + test3Sha + " : test3\n";
+        String treeContents2 = "tree : " + treeSha + "\nblob : " + test4Sha + " : test4\nblob : " + test3Sha
+                + " : test3\ntree : da39a3ee5e6b4b0d3255bfef95601890afd80709 : directory\n";
         String treeSha2 = Utils.getSHA(treeContents2);
         String commitContents2 = treeSha2 + "\n" + c0.getCommitSha() + "\n\nname\n" + Utils.getDate()
                 + "\nsummary";
         String commitSha2 = Utils.getSHA(commitContents2);
 
-        File treeFile2 = new File("./test/objects/" + treeSha2);
-        File commitFile2 = new File("./test/objects/" + commitSha2);
+        File treeFile2 = new File("test/objects/" + treeSha2);
+        File commitFile2 = new File("test/objects/" + commitSha2);
 
-        assertTrue("tree does not exist", treeFile2.exists());
+        // testing commit 1
+        assertTrue("tree does not exist", treeFile.exists());
+        assertEquals("tree has wrong contents", Utils.getFileContents(treeFile), treeContents);
+
+        assertTrue("commit does not exist", commitFile.exists());
+        assertEquals("commit has wrong contents", Utils.getFileContents(commitFile), newCommitContents);
+
+        // testing commit 2
+        assertEquals("", treeSha2, Utils.getSHA(treeContents2));
+        assertTrue("tree2 does not exist", treeFile2.exists());
         assertEquals("tree has wrong contents", Utils.getFileContents(treeFile2), treeContents2);
 
         assertTrue("commit does not exist", commitFile2.exists());

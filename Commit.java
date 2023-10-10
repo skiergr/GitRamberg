@@ -36,13 +36,13 @@ public class Commit {
         Utils.createNewFile(test3, "testing3");
         File test4 = new File("test4");
         Utils.createNewFile(test4, "testing4");
-        File directory2 = new File("/director2");
-        Utils.createNewDirectory(directory2);
+        File directory = new File("/directory");
+        Utils.createNewDirectory(directory);
         Index index2 = new Index();
         index2.init();
         index2.add("test3");
         index2.add("test4");
-        index2.add("directory2");
+        index2.add("directory");
         Commit c1 = new Commit(c0.getCommitSha(), "name", "summary");
 
         String test1Sha = Utils.getSHA(Utils.getFileContents(test1));
@@ -51,6 +51,8 @@ public class Commit {
         String treeSha = Utils.getSHA(treeContents);
         String commitContents = treeSha + "\n\n\nname\n" + Utils.getDate()
                 + "\nsummary";
+        String newCommitContents = treeSha + "\n\n" + c1.getCommitSha() + "\nname\n" + Utils.getDate()
+                + "\nsummary";
         String commitSha = Utils.getSHA(commitContents);
 
         File treeFile = new File("./test/objects/" + treeSha);
@@ -58,14 +60,18 @@ public class Commit {
 
         String test3Sha = Utils.getSHA(Utils.getFileContents(test3));
         String test4Sha = Utils.getSHA(Utils.getFileContents(test4));
-        String treeContents2 = "blob : " + test4Sha + " : test4\nblob : " + test3Sha + " : test3\n";
+        String treeContents2 = "tree : " + treeSha + "\nblob : " + test4Sha + " : test4\nblob : " + test3Sha
+                + " : test3\ntree : da39a3ee5e6b4b0d3255bfef95601890afd80709 : directory\n";
         String treeSha2 = Utils.getSHA(treeContents2);
         String commitContents2 = treeSha2 + "\n" + c0.getCommitSha() + "\n\nname\n" + Utils.getDate()
                 + "\nsummary";
         String commitSha2 = Utils.getSHA(commitContents2);
 
-        File treeFile2 = new File("./test/objects/" + treeSha2);
-        File commitFile2 = new File("./test/objects/" + commitSha2);
+        File treeFile2 = new File("test/objects/" + treeSha2);
+        File commitFile2 = new File("test/objects/" + commitSha2);
+
+        System.out.println(treeFile2.exists());
+        ;
     }
 
     // first commit ever
