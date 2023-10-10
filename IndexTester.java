@@ -1,12 +1,12 @@
 import java.io.IOException;
 
 public class IndexTester {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         Index index = new Index();
         index.init();
         index.add("testFile");
         index.add("testfile2");
         index.add("testfile3");
-        //index.remove("testFile");
+        // index.remove("testFile");
     }
 }

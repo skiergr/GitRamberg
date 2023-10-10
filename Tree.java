@@ -152,7 +152,6 @@ public class Tree {
         File file = new File("test/objects/" + sha);
         File file2 = new File(currentFileName);
 
-        file2.delete();
         file.createNewFile();
         currentFileName = "test/objects/" + sha;
 
@@ -189,7 +188,6 @@ public class Tree {
         File file = new File("test/objects/" + sha);
         File file2 = new File(currentFileName);
 
-        file2.delete();
         file.createNewFile();
 
         currentFileName = "test/objects/" + sha;

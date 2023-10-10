@@ -35,18 +35,18 @@ public class Commit {
         index.add("directory");
         Commit c0 = new Commit("name", "summary");
 
-        // File test3 = new File("test3");
-        // Utils.createNewFile(test3, "testing3");
-        // File test4 = new File("test4");
-        // Utils.createNewFile(test4, "testing4");
-        // File directory = new File("directory");
-        // Utils.createNewDirectory(directory);
-        // Index index2 = new Index();
-        // index2.init();
-        // index2.add("test3");
-        // index2.add("test4");
-        // index2.add("directory");
-        // Commit c1 = new Commit(c0.getCommitSha(), "name", "summary");
+        File test3 = new File("test3");
+        Utils.createNewFile(test3, "testing3");
+        File test4 = new File("test4");
+        Utils.createNewFile(test4, "testing4");
+        File directory2 = new File("directory2");
+        Utils.createNewDirectory(directory2);
+        Index index2 = new Index();
+        index2.init();
+        index2.add("test3");
+        index2.add("test4");
+        index2.add("directory2");
+        Commit c1 = new Commit(c0.getCommitSha(), "name", "summary");
     }
 
     // first commit ever
@@ -83,6 +83,7 @@ public class Commit {
         index.init();
         StringBuilder total = new StringBuilder();
         Tree tree = new Tree();
+        addPreviousTree(tree, parentCommit);
         treeSha = createTree(tree);
         String date = getDate();
 
@@ -119,6 +120,18 @@ public class Commit {
 
     public String getTreeSha() {
         return treeSha;
+    }
+
+    public void addPreviousTree(Tree tree, String parentCommmit) throws Exception {
+        File parentCommitFile = new File("test/objects/" + parentCommmit);
+        if (!parentCommitFile.exists()) {
+            throw new Exception("parent commit doesn't exist");
+        }
+        BufferedReader br = new BufferedReader(new FileReader(parentCommitFile));
+        String prevTree = br.readLine();
+        br.close();
+        tree.add("tree : " + prevTree);
+
     }
 
     public void addIndexToTree(Tree tree) throws Exception {
@@ -196,7 +209,7 @@ public class Commit {
             BufferedReader br = new BufferedReader(new FileReader(prevCommit));
             sb.append(br.readLine() + "\n");
             sb.append(br.readLine() + "\n");
-            sb.append(commitSha);
+            sb.append(commitSha + "\n");
             sb.append(br.readLine() + "\n");
             sb.append(br.readLine() + "\n");
             sb.append(br.readLine());
