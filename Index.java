@@ -11,7 +11,7 @@ public class Index {
     String indexRelativePath;
     String objectsRelativePath;
 
-    public Index() {
+    public Index() throws Exception {
         indexMap = new HashMap<String, String>();
         treeMap = new HashMap<String, String>();
         objectsRelativePath = "./test/objects";

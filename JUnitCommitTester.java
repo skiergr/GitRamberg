@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
 
-public class CommitTest {
+public class JUnitCommitTester {
 
         // tests if the commit is being correctly generated
 

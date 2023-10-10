@@ -8,7 +8,7 @@ public class Blob {
     String contents;
     String sha1Contents;
 
-    public Blob(String fileInput) throws IOException {
+    public Blob(String fileInput) throws Exception {
         Index index = new Index();
         index.init();
         fileName = fileInput;

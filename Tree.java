@@ -33,7 +33,7 @@ public class Tree {
 
     private String currentFileName;
 
-    public Tree() throws IOException {
+    public Tree() throws Exception {
         index = new Index();
         index.init();
 

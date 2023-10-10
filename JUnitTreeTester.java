@@ -73,7 +73,7 @@ public class JUnitTreeTester {
 
     @Test
     @DisplayName("Testing that the tree file is created properly.")
-    void testTreeFileCreation() throws IOException {
+    void testTreeFileCreation() throws Exception {
         Index index = new Index();
         index.init();
         Tree tree = new Tree();
@@ -87,7 +87,7 @@ public class JUnitTreeTester {
 
     @Test
     @DisplayName("Testing Add function.")
-    void testAdd() throws IOException {
+    void testAdd() throws Exception {
         Index index = new Index();
         index.init();
         Tree tree = new Tree();
@@ -110,7 +110,7 @@ public class JUnitTreeTester {
 
     @Test
     @DisplayName("Testing Remove.")
-    void testRemove() throws IOException {
+    void testRemove() throws Exception {
         Index index = new Index();
         index.init();
         Tree tree = new Tree();
