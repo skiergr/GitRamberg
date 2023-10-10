@@ -70,8 +70,28 @@ public class Commit {
         File treeFile2 = new File("test/objects/" + treeSha2);
         File commitFile2 = new File("test/objects/" + commitSha2);
 
-        System.out.println(treeFile2.exists());
-        ;
+        // testing commit 1
+        if (treeFile.exists()) {
+            System.out.println("1 is true");
+        }
+        if (Utils.getFileContents(treeFile).equals(treeContents)) {
+            System.out.println("2 is true");
+        }
+
+        if (commitFile.exists()) {
+            System.out.println("3 is true");
+        }
+        if (Utils.getFileContents(commitFile).equals(newCommitContents)) {
+            System.out.println("4 is true");
+        }
+
+        if (treeSha2.equals(Utils.getSHA(treeContents2))) {
+            System.out.println("5 is true");
+        }
+        if (treeFile2.exists()) {
+            System.out.println("Why is this trueeeee");
+        }
+
     }
 
     // first commit ever
