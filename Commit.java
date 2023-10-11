@@ -162,6 +162,7 @@ public class Commit {
         Tree tree = new Tree();
         addPreviousTree(tree, parentCommit);
         treeSha = createTree(tree);
+        String testSha = Utils.getSHA(Utils.getFileContents(new File("./test/objects/" + tree.getSHA())));
         String date = getDate();
 
         total.append(treeSha);

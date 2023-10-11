@@ -226,13 +226,13 @@ public class JUnitCommitTester {
                 Utils.createNewFile(test7, "testing7");
                 File test8 = new File("test8");
                 Utils.createNewFile(test8, "testing8");
-                File directory2 = new File("directory2");
-                Utils.createNewDirectory(directory2);
+                File directory3 = new File("directory3");
+                Utils.createNewDirectory(directory3);
                 Index index4 = new Index();
                 index4.init();
                 index4.add("test7");
                 index4.add("test8");
-                index4.add("directory2");
+                index4.add("directory3");
                 Commit c3 = new Commit(c2.getCommitSha(), "name", "summary");
 
                 //
@@ -248,7 +248,7 @@ public class JUnitCommitTester {
                 String commitSha = Utils.getSHA(commitContents);
                 File treeFile = new File("./test/objects/" + treeSha);
                 File commitFile = new File("./test/objects/" + commitSha);
-
+                String absolutePath = treeFile.getAbsolutePath();
                 String test3Sha = Utils.getSHA(Utils.getFileContents(test3));
                 String test4Sha = Utils.getSHA(Utils.getFileContents(test4));
                 String treeContents2 = "tree : " + treeSha + "\nblob : " + test4Sha + " : test4\nblob : " + test3Sha
@@ -280,7 +280,7 @@ public class JUnitCommitTester {
                 String test7Sha = Utils.getSHA(Utils.getFileContents(test7));
                 String test8Sha = Utils.getSHA(Utils.getFileContents(test8));
                 String treeContents4 = "tree : " + treeSha3 + "\nblob : " + test8Sha + " : test8\nblob : " + test7Sha
-                                + " : test7\ntree : da39a3ee5e6b4b0d3255bfef95601890afd80709 : directory2\n";
+                                + " : test7\ntree : da39a3ee5e6b4b0d3255bfef95601890afd80709 : directory3\n";
                 String treeSha4 = Utils.getSHA(treeContents4);
                 String commitContents4 = treeSha4 + "\n" + c2.getCommitSha() + "\n\nname\n" + Utils.getDate()
                                 + "\nsummary";
@@ -310,7 +310,9 @@ public class JUnitCommitTester {
                 assertEquals("commit has wrong contents", Utils.getFileContents(commitFile3), newCommitContents3);
 
                 // testing commit 4
-                assertEquals("difu", treeContents4, treeSha4);
+                // assertEquals("difu", treeFile3.getAbsolutePath(),
+                // Utils.getFileContents(
+                // new File("./test/objects/c2eac1f06be1dede2747d986287bd8ecad8f80d7")));
                 assertTrue("tree does not exist", treeFile4.exists());
                 assertEquals("tree has wrong contents", Utils.getFileContents(treeFile4), treeContents4);
 
