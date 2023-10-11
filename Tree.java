@@ -252,6 +252,14 @@ public class Tree {
         }
         br.close();
 
+        entries.clear();
+        sha = convertToSha1("");
+        File file = new File("test/objects/" + sha);
+        File file2 = new File(currentFileName);
+        file.createNewFile();
+        currentFileName = "test/objects/" + sha;
+        printHash();
+
         String prevprevTree = br.readLine();
         ArrayList<String> prevTreeContents = new ArrayList<String>();
         String line;
