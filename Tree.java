@@ -1,7 +1,7 @@
 import java.io.BufferedReader;
 
 import java.io.File;
-
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 
 import java.io.FileWriter;
@@ -237,6 +237,43 @@ public class Tree {
         currentFileName = "test/objects/" + sha;
         printHash();
         return sha;
+
+    }
+
+    public void deleteFile(String prevTree, String deleteLine) throws Exception {
+        String fileName = deleteLine.substring(9, deleteLine.length());
+
+        StringBuilder sb = new StringBuilder();
+        BufferedReader brCurrent = new BufferedReader(new FileReader(new File("./test/objects/" + sha)));
+        BufferedReader br = new BufferedReader(new FileReader(new File("./test/objects/" + prevTree)));
+        br.readLine();
+        while (br.ready()) {
+            sb.append(br.readLine());
+        }
+        br.close();
+
+        String prevprevTree = br.readLine();
+        ArrayList<String> prevTreeContents = new ArrayList<String>();
+        String line;
+        boolean fileIsHere = false;
+        while (br.ready()) {
+            line = br.readLine();
+            if (line.contains(fileName)) {
+                fileIsHere = true;
+            } else {
+                prevTreeContents.add(line);
+            }
+        }
+
+        if (fileIsHere) {
+            add("tree : " + prevprevTree);
+        } else {
+            deleteFile(prevprevTree, deleteLine);
+        }
+        add(sb.toString());
+        for (int i = 0; i < prevTreeContents.size(); i++) {
+            add(prevTreeContents.get(i));
+        }
 
     }
 

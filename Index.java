@@ -61,6 +61,9 @@ public class Index {
         for (String directoryName : treeMap.keySet()) {
             writer.write("tree : " + treeMap.get(directoryName) + " : " + directoryName + "\n");
         }
+        for (int i = 0; i < deleteMap.size(); i++) {
+            writer.write("*deleted* " + deleteMap.get(i) + "\n");
+        }
 
         writer.close();
     }

@@ -20,6 +20,7 @@ public class Commit {
     String commitSha;
     String prevCommitSha;
     String treeSha;
+    String prevTree;
 
     public static void main(String[] args) throws Exception {
         File test1 = new File("test1");
@@ -206,7 +207,7 @@ public class Commit {
             throw new Exception("parent commit doesn't exist");
         }
         BufferedReader br = new BufferedReader(new FileReader(parentCommitFile));
-        String prevTree = br.readLine();
+        prevTree = br.readLine();
         br.close();
         tree.add("tree : " + prevTree);
 
@@ -221,6 +222,9 @@ public class Commit {
         String line;
         while (br.ready()) {
             line = br.readLine();
+            if (line.contains("*delete*")) {
+                tree.deleteFile(prevTree, line);
+            }
             tree.add(line);
         }
         br.close();
