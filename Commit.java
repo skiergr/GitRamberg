@@ -36,7 +36,7 @@ public class Commit {
         Utils.createNewFile(test3, "testing3");
         File test4 = new File("test4");
         Utils.createNewFile(test4, "testing4");
-        File directory = new File("/directory");
+        File directory = new File("directory");
         Utils.createNewDirectory(directory);
         Index index2 = new Index();
         index2.init();
@@ -44,6 +44,31 @@ public class Commit {
         index2.add("test4");
         index2.add("directory");
         Commit c1 = new Commit(c0.getCommitSha(), "name", "summary");
+
+        File test5 = new File("test5");
+        Utils.createNewFile(test5, "testing5");
+        File test6 = new File("test6");
+        Utils.createNewFile(test6, "testing6");
+        Index index3 = new Index();
+        index3.init();
+        index3.add("test5");
+        index3.add("test6");
+        Commit c2 = new Commit(c1.getCommitSha(), "name", "summary");
+
+        File test7 = new File("test7");
+        Utils.createNewFile(test7, "testing7");
+        File test8 = new File("test8");
+        Utils.createNewFile(test8, "testing8");
+        File directory2 = new File("directory2");
+        Utils.createNewDirectory(directory2);
+        Index index4 = new Index();
+        index4.init();
+        index4.add("test7");
+        index4.add("test8");
+        index4.add("directory2");
+        Commit c3 = new Commit(c2.getCommitSha(), "name", "summary");
+
+        //
 
         String test1Sha = Utils.getSHA(Utils.getFileContents(test1));
         String test2Sha = Utils.getSHA(Utils.getFileContents(test2));
@@ -54,7 +79,6 @@ public class Commit {
         String newCommitContents = treeSha + "\n\n" + c1.getCommitSha() + "\nname\n" + Utils.getDate()
                 + "\nsummary";
         String commitSha = Utils.getSHA(commitContents);
-
         File treeFile = new File("./test/objects/" + treeSha);
         File commitFile = new File("./test/objects/" + commitSha);
 
@@ -65,32 +89,37 @@ public class Commit {
         String treeSha2 = Utils.getSHA(treeContents2);
         String commitContents2 = treeSha2 + "\n" + c0.getCommitSha() + "\n\nname\n" + Utils.getDate()
                 + "\nsummary";
+        String newCommitContents2 = treeSha2 + "\n" + c0.getCommitSha() + "\n" + c2.getCommitSha() + "\nname\n"
+                + Utils.getDate()
+                + "\nsummary";
         String commitSha2 = Utils.getSHA(commitContents2);
-
         File treeFile2 = new File("test/objects/" + treeSha2);
         File commitFile2 = new File("test/objects/" + commitSha2);
 
-        // testing commit 1
-        if (treeFile.exists()) {
-            System.out.println("1 is true");
-        }
-        if (Utils.getFileContents(treeFile).equals(treeContents)) {
-            System.out.println("2 is true");
-        }
+        String test5Sha = Utils.getSHA(Utils.getFileContents(test5));
+        String test6Sha = Utils.getSHA(Utils.getFileContents(test6));
+        String treeContents3 = "tree : " + treeSha2 + "\nblob : " + test5Sha + " : test5\nblob : " + test6Sha
+                + " : test6\n";
+        String treeSha3 = Utils.getSHA(treeContents3);
+        String commitContents3 = treeSha2 + "\n" + c1.getCommitSha() + "\n\nname\n" + Utils.getDate()
+                + "\nsummary";
+        String newCommitContents3 = treeSha2 + "\n" + c1.getCommitSha() + "\n" + c3.getCommitSha() + "\nname\n"
+                + Utils.getDate()
+                + "\nsummary";
+        String commitSha3 = Utils.getSHA(commitContents3);
+        File treeFile3 = new File("test/objects/" + treeSha3);
+        File commitFile3 = new File("test/objects/" + commitSha3);
 
-        if (commitFile.exists()) {
-            System.out.println("3 is true");
-        }
-        if (Utils.getFileContents(commitFile).equals(newCommitContents)) {
-            System.out.println("4 is true");
-        }
-
-        if (treeSha2.equals(Utils.getSHA(treeContents2))) {
-            System.out.println("5 is true");
-        }
-        if (treeFile2.exists()) {
-            System.out.println("Why is this trueeeee");
-        }
+        String test7Sha = Utils.getSHA(Utils.getFileContents(test7));
+        String test8Sha = Utils.getSHA(Utils.getFileContents(test8));
+        String treeContents4 = "tree : " + treeSha3 + "\nblob : " + test8Sha + " : test8\nblob : " + test7Sha
+                + " : test7\ntree : da39a3ee5e6b4b0d3255bfef95601890afd80709 : directory2\n";
+        String treeSha4 = Utils.getSHA(treeContents4);
+        String commitContents4 = treeSha4 + "\n" + c2.getCommitSha() + "\n\nname\n" + Utils.getDate()
+                + "\nsummary";
+        String commitSha4 = Utils.getSHA(commitContents4);
+        File treeFile4 = new File("test/objects/" + treeSha4);
+        File commitFile4 = new File("test/objects/" + commitSha4);
 
     }
 

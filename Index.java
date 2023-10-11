@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Index {
@@ -8,6 +9,7 @@ public class Index {
     // Value = sha1 file contents
     HashMap<String, String> indexMap;
     HashMap<String, String> treeMap;
+    ArrayList<String> deleteMap;
     String indexRelativePath;
     String objectsRelativePath;
 
@@ -46,11 +48,8 @@ public class Index {
         rewriteIndex();
     }
 
-    public void remove(String fileName) throws IOException {
-        String sha1 = indexMap.get(fileName);
-        File blob = new File("./test/objects/" + sha1);
-        blob.delete();
-        indexMap.remove(fileName);
+    public void delete(String fileName) throws IOException {
+        deleteMap.add(fileName);
         rewriteIndex();
     }
 
