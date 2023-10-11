@@ -10,6 +10,7 @@ public class Index {
     HashMap<String, String> indexMap;
     HashMap<String, String> treeMap;
     ArrayList<String> deleteMap;
+    ArrayList<String> editMap;
     String indexRelativePath;
     String objectsRelativePath;
 
@@ -17,6 +18,7 @@ public class Index {
         indexMap = new HashMap<String, String>();
         treeMap = new HashMap<String, String>();
         deleteMap = new ArrayList<String>();
+        editMap = new ArrayList<String>();
         objectsRelativePath = "./test/objects";
         indexRelativePath = "./test/index";
     }
@@ -54,6 +56,11 @@ public class Index {
         rewriteIndex();
     }
 
+    public void edit(String fileName) throws IOException {
+        editMap.add(fileName);
+        rewriteIndex();
+    }
+
     public void rewriteIndex() throws IOException {
         FileWriter writer = new FileWriter(indexRelativePath);
         for (String fileName : indexMap.keySet()) {
@@ -64,6 +71,9 @@ public class Index {
         }
         for (int i = 0; i < deleteMap.size(); i++) {
             writer.write("*deleted* " + deleteMap.get(i) + "\n");
+        }
+        for (int i = 0; i < editMap.size(); i++) {
+            writer.write("*edited* " + editMap.get(i) + "\n");
         }
 
         writer.close();

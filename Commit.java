@@ -141,6 +141,9 @@ public class Commit {
             if (line.contains("*deleted*")) {
                 tree.deleteFile(prevTree, line);
             }
+            if (line.contains("*edited*")) {
+                tree.editFile(prevTree, line);
+            }
             tree.add(line);
         }
         br.close();
