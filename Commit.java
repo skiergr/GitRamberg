@@ -101,25 +101,28 @@ public class Commit {
         String treeContents3 = "tree : " + treeSha2 + "\nblob : " + test5Sha + " : test5\nblob : " + test6Sha
                 + " : test6\n";
         String treeSha3 = Utils.getSHA(treeContents3);
-        String commitContents3 = treeSha2 + "\n" + c1.getCommitSha() + "\n\nname\n" + Utils.getDate()
+        String commitContents3 = treeSha3 + "\n" + c1.getCommitSha() + "\n\nname\n" + Utils.getDate()
                 + "\nsummary";
-        String newCommitContents3 = treeSha2 + "\n" + c1.getCommitSha() + "\n" + c3.getCommitSha() + "\nname\n"
+        String newCommitContents3 = treeSha3 + "\n" + c1.getCommitSha() + "\n" + c3.getCommitSha() + "\nname\n"
                 + Utils.getDate()
                 + "\nsummary";
         String commitSha3 = Utils.getSHA(commitContents3);
-        File treeFile3 = new File("test/objects/" + treeSha3);
-        File commitFile3 = new File("test/objects/" + commitSha3);
+        File treeFile3 = new File("./test/objects/" + treeSha3);
+        File commitFile3 = new File("./test/objects/" + commitSha3);
 
         String test7Sha = Utils.getSHA(Utils.getFileContents(test7));
         String test8Sha = Utils.getSHA(Utils.getFileContents(test8));
         String treeContents4 = "tree : " + treeSha3 + "\nblob : " + test8Sha + " : test8\nblob : " + test7Sha
-                + " : test7\ntree : da39a3ee5e6b4b0d3255bfef95601890afd80709 : directory2\n";
+                + " : test7\ntree : da39a3ee5e6b4b0d3255bfef95601890afd80709 : directory2";
         String treeSha4 = Utils.getSHA(treeContents4);
         String commitContents4 = treeSha4 + "\n" + c2.getCommitSha() + "\n\nname\n" + Utils.getDate()
                 + "\nsummary";
         String commitSha4 = Utils.getSHA(commitContents4);
-        File treeFile4 = new File("test/objects/" + treeSha4);
-        File commitFile4 = new File("test/objects/" + commitSha4);
+        File treeFile4 = new File("./test/objects/" + treeSha4);
+        File commitFile4 = new File("./test/objects/" + commitSha4);
+
+        System.out.println(Utils.getSHA(
+                "tree : 7945092330da573a0c1b23cbc22fea87b61a53b1\nblob : 1ff815830eefbfe273aef620cbfc0b28d96c94d5 : test8\nblob : 47f35f2106f6f9c57ab03774d439e2a788ef6e94 : test7\ntree : da39a3ee5e6b4b0d3255bfef95601890afd80709 : directory2\n"));
 
     }
 

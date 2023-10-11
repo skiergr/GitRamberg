@@ -6,6 +6,13 @@
   "configurations": [
     {
       "type": "java",
+      "name": "commitmain",
+      "request": "launch",
+      "mainClass": "commitmain",
+      "projectName": "GitRamberg_75e70d03"
+    },
+    {
+      "type": "java",
       "name": "CommitMain",
       "request": "launch",
       "mainClass": "CommitMain",
