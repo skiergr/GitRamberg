@@ -245,42 +245,49 @@ public class Tree {
 
         StringBuilder sb = new StringBuilder();
         BufferedReader brCurrent = new BufferedReader(new FileReader(new File("./test/objects/" + sha)));
-        BufferedReader br = new BufferedReader(new FileReader(new File("./test/objects/" + prevTree)));
-        br.readLine();
-        while (br.ready()) {
-            sb.append(br.readLine());
+        BufferedReader br = new BufferedReader(
+                new FileReader(new File("./test/objects/" + prevTree)));
+        brCurrent.readLine();
+        while (brCurrent.ready()) {
+            sb.append(brCurrent.readLine() + "\n");
         }
-        br.close();
+        brCurrent.close();
 
         entries.clear();
         sha = convertToSha1("");
         File file = new File("test/objects/" + sha);
-        File file2 = new File(currentFileName);
         file.createNewFile();
         currentFileName = "test/objects/" + sha;
         printHash();
 
-        String prevprevTree = br.readLine();
-        ArrayList<String> prevTreeContents = new ArrayList<String>();
-        String line;
-        boolean fileIsHere = false;
-        while (br.ready()) {
-            line = br.readLine();
-            if (line.contains(fileName)) {
-                fileIsHere = true;
-            } else {
-                prevTreeContents.add(line);
+        boolean prevprevTreeexists;
+        String prevprevTreeFull = br.readLine();
+        if (prevprevTreeFull.length() > 0) {
+            String prevprevTreeTemp = prevprevTreeFull.substring(7, prevprevTreeFull.length());
+            String prevprevTree = prevprevTreeTemp.substring(0, prevprevTreeTemp.length() - 8);
+            ArrayList<String> prevTreeContents = new ArrayList<String>();
+            String line;
+            boolean fileIsHere = false;
+            while (br.ready()) {
+                line = br.readLine();
+                if (line.contains(fileName)) {
+                    fileIsHere = true;
+                } else {
+                    prevTreeContents.add(line);
+                }
             }
-        }
-
-        if (fileIsHere) {
-            add("tree : " + prevprevTree);
+            br.close();
+            if (fileIsHere) {
+                add("tree : " + prevprevTree);
+            } else {
+                deleteFile(prevprevTree, deleteLine);
+            }
+            add(sb.toString());
+            for (int i = 0; i < prevTreeContents.size(); i++) {
+                add(prevTreeContents.get(i));
+            }
         } else {
-            deleteFile(prevprevTree, deleteLine);
-        }
-        add(sb.toString());
-        for (int i = 0; i < prevTreeContents.size(); i++) {
-            add(prevTreeContents.get(i));
+            // figure out what to do here
         }
 
     }

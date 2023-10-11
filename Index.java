@@ -16,6 +16,7 @@ public class Index {
     public Index() throws Exception {
         indexMap = new HashMap<String, String>();
         treeMap = new HashMap<String, String>();
+        deleteMap = new ArrayList<String>();
         objectsRelativePath = "./test/objects";
         indexRelativePath = "./test/index";
     }
