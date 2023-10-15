@@ -10,8 +10,11 @@ import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Formatter;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.io.BufferedReader;
 
@@ -226,6 +229,66 @@ public class Commit {
 
     public String getCommitSha() {
         return commitSha;
+    }
+
+    public static void checkout(String SHA1) throws Exception {
+        ArrayList<String> whyIsThisHardCoded = new ArrayList<String>(Arrays.asList(".vscode", "Commit Screenshots",
+                "lib", "test", "Blob.java", "codeConfig.json", "Commit.java", "Index.java", "JUnitBlobTester.java",
+                "JUniteCommitTester.java", "JUniteIndexTester.java", "JUniteTreeTester.java", "README.md", "Tree.java",
+                "Utils.java"));
+        deleteFiles(whyIsThisHardCoded);
+        String rootTree = getTreeShaFromSha(SHA1);
+        createFilesFromSha(rootTree, "./GITRAMBERG");
+
+    }
+
+    public static void deleteFiles(ArrayList<String> hardCoded) {
+        File git = new File("./GITRAMBERG");
+        File[] listFiles = git.listFiles();
+        for (int i = 0; i < listFiles.length; i++) {
+            if (!hardCoded.contains(listFiles[i].getName())) {
+                listFiles[i].delete();
+            }
+        }
+    }
+
+    public static void createFilesFromSha(String treeSha, String relativePath) throws Exception {
+        BufferedReader br = new BufferedReader(new FileReader(new File("./test/objects/" + treeSha)));
+        String line;
+        HashMap<String, String> fileMap = new HashMap<String, String>();
+
+        while (br.ready()) {
+            line = br.readLine();
+            if (line.contains("blob")) {
+                fileMap.put(line.substring(50, line.length()), line.substring(7, 47));
+            }
+            if (line.contains("tree")) {
+                if (line.length() > 47) {
+                    createFilesFromSha(line.substring(7, 47), relativePath + "/" + line.substring(50, line.length()));
+                } else {
+                    createFilesFromSha(treeSha, "");
+                }
+            }
+        }
+        createFiles(fileMap, "");
+        br.close();
+    }
+
+    public static String getTreeShaFromSha(String sha) throws Exception {
+        BufferedReader br = new BufferedReader(new FileReader(new File("./test/objects/" + sha)));
+        String line = br.readLine();
+        br.close();
+        return line;
+    }
+
+    public static void createFiles(HashMap<String, String> map, String relativePath) throws Exception {
+        String contents;
+        File newFile;
+        for (String key : map.keySet()) {
+            contents = Utils.getFileContents(new File("./test/objects/" + map.get(key)));
+            newFile = new File(relativePath + "/" + key);
+            Utils.createNewFile(newFile, contents);
+        }
     }
 
 }

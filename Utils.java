@@ -71,4 +71,10 @@ public class Utils {
         String timeStamp = new SimpleDateFormat("MM-dd-YYYY").format(Calendar.getInstance().getTime());
         return timeStamp;
     }
+
+    public static void deleteFile(File file) {
+        if (file.exists()) {
+            file.delete();
+        }
+    }
 }
