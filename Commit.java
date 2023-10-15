@@ -26,23 +26,10 @@ public class Commit {
     String prevTree;
 
     public static void main(String[] args) throws Exception {
-        File file0 = new File("file0");
-        Utils.createNewFile(file0, "test0");
-        Index index0 = new Index();
-        index0.init();
-        index0.add("file1");
-        Commit c0 = new Commit("name", "summary");
-
-        File file1 = new File("file1");
-        Utils.createNewFile(file1, "test1");
-        Index index = new Index();
-        index.init();
-        index.add("file1");
-        Commit c1 = new Commit(c0.getCommitSha(), "name", "summary");
-
-        Index index2 = new Index();
-        index2.delete("test1");
-        Commit c2 = new Commit(c1.getCommitSha(), "name", "summary");
+        File file = new File("test.txt");
+        Utils.createNewFile(file, "testing");
+        Commit commit = new Commit("name", "summary");
+        Utils.deleteFile(file);
 
     }
 
@@ -264,6 +251,8 @@ public class Commit {
             }
             if (line.contains("tree")) {
                 if (line.length() > 47) {
+                    File dir = new File(relativePath + "/" + line.substring(50, line.length()));
+                    dir.mkdir();
                     createFilesFromSha(line.substring(7, 47), relativePath + "/" + line.substring(50, line.length()));
                 } else {
                     createFilesFromSha(treeSha, "");
